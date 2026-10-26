@@ -1,0 +1,237 @@
+<div class="customer-detail-container" *ngIf="detailData">
+  <!-- Header Section -->
+  <div class="detail-header">
+    <div class="col-6 flex flex-row p-0 align-items-center gap-4">
+      <div class="avatar-section">
+        <p-avatar
+          [label]="detailData?.customer?.name.charAt(0)"
+          shape="circle"
+          styleClass="customer-avatar">
+        </p-avatar>
+      </div>
+
+      <div class="col">
+        <p-tag [severity]="getStatusSeverity(detailData.customer.status)" [value]="getStatusValue(detailData.customer.status)" />
+      </div>
+
+      <div class="grid grid-nogutter col-10  align-items-center">
+        <div class="col-5 align-items-center grid grid-nogutter">
+          <span class="col-3 small-font font-bold">{{ 'name' | translate }}</span>
+          <span class="col-1 small-font">:</span>
+          <span class="col small-font">{{ detailData.customer.name }}</span>
+        </div>
+        <div class="col-5 align-items-center grid grid-nogutter">
+          <span class="col-3 small-font font-bold">{{ 'email' | translate }}</span>
+          <span class="col-1 small-font">:</span>
+          <span class="col small-font">{{ detailData.customer.email }}</span>
+        </div>
+        <div class="col-5 align-items-center grid grid-nogutter">
+          <span class="col-3 small-font font-bold">{{ 'cif' | translate }}</span>
+          <span class="col-1 small-font">:</span>
+          <span class="col small-font">{{ detailData.customer.cif }}</span>
+        </div>
+        <div class="col-5 align-items-center grid grid-nogutter">
+          <span class="col-3 small-font font-bold">{{ 'birthDate' | translate }}</span>
+          <span class="col-1 small-font">:</span>
+          <span class="col small-font">{{ detailData.customer.birthDate | date }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="risk-score-section">
+      <div class="risk-score-container">
+        <span class="risk-score-label">Risk Score</span>
+        <div class="risk-score-value">
+      <span class="score-number" [ngClass]="'score-' + getRiskScoreColor(detailData.customer.riskScore)">
+        {{ detailData.customer?.riskScore }}
+      </span>
+        </div>
+        <span class="risk-trend-text">
+          Last Update : {{ detailData.customer?.riskScoreUpdatedDate | date }}
+    </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="grid">
+    <!-- Left Column -->
+    <div class="col-9 p-0">
+      <p-tabs value="transactions">
+        <p-tablist>
+          <p-tab value="transactions">Transactions</p-tab>
+          <p-tab value="cases">Cases</p-tab>
+          <p-tab value="accounts">Accounts</p-tab>
+        </p-tablist>
+        <p-tabpanels class="mt-3 p-0 pl-2">
+          <p-tabpanel value="transactions">
+            <div class="col-12 flex flex-row p-0 pb-3 gap-3">
+              <app-dashboard-card-summary
+                [label]="'firstTrxTime' | translate"
+                fontSize=".7rem"
+                fontWeight="600"
+                [icon]="'pi-book'"
+                [count]="detailData.customer.firstTrxTime | date: 'EEEE, MMMM d y h:mm:ss a'"></app-dashboard-card-summary>
+              <app-dashboard-card-summary
+                [label]="'lastTrxTime' | translate"
+                fontSize=".7rem"
+                fontWeight="600"
+                [icon]="'pi-book'"
+                [count]="detailData.customer.lastTrxTime | date: 'EEEE, MMMM d y h:mm:ss a'"></app-dashboard-card-summary>
+            </div>
+            <app-table-from-json
+              listName="5 Recent Transactions"
+              [data]="detailData?.recentTransactions"></app-table-from-json>
+
+            <p-panel header="Risk Score Trend" styleClass="mt-3">
+              <ng-template pTemplate="icons">
+                <button class="p-panel-header-icon">
+                  <span class="pi pi-chart-bar"></span>
+                </button>
+              </ng-template>
+
+              <div class="chart-container" [ngClass]="{'opacity-50': !hasChartData()}">
+                <div class="grid justify-content-between">
+                  <!-- Pie Chart - Decision Distribution -->
+                  <div class="col-4">
+                    <p-chart
+                      type="pie"
+                      [data]="pieChartData"
+                      [options]="pieChartOptions"
+                      width="100%"
+                      height="150px">
+                    </p-chart>
+                  </div>
+
+                  <!-- Bar Chart - Severity Distribution -->
+                  <div class="col-6">
+                    <p-chart
+                      type="bar"
+                      [data]="barChartData"
+                      [options]="barChartOptions"
+                      width="100%"
+                      height="150px">
+                    </p-chart>
+                  </div>
+
+                  <!-- Scatter Chart - Risk Score Analysis -->
+                  <div class="col-12">
+                    <p-chart
+                      type="scatter"
+                      [data]="scatterChartData"
+                      [options]="scatterChartOptions"
+                      width="100%"
+                      height="150px">
+                    </p-chart>
+                  </div>
+                </div>
+              </div>
+
+            </p-panel>
+          </p-tabpanel>
+          <p-tabpanel value="cases">
+            <app-table-helper-lazy
+              [hideActionButton]="true"
+              [data]="detailData.casesHistory"
+              [totalRecord]="detailData.casesHistory.length"
+              [fields]="fieldsCases"
+              [objectName]="'Cases History'"
+              (viewEvent)="onView($event)"
+            >
+
+            </app-table-helper-lazy>
+          </p-tabpanel>
+          <p-tabpanel value="accounts">
+            <app-table-helper-lazy
+              [hideActionButton]="true"
+              [data]="detailData.accounts"
+              [totalRecord]="detailData.accounts.length"
+              [fields]="fieldsAccounts"
+              [objectName]="'account' | translate"
+              (viewEvent)="onView($event)"
+              (statusEvent)="onChangeAccountStatus($event)"
+              [disableDelete]="true"
+            >
+
+            </app-table-helper-lazy>
+          </p-tabpanel>
+        </p-tabpanels>
+      </p-tabs>
+
+    </div>
+
+    <!-- Right Column -->
+    <div class="col-3 flex flex-column gap-3">
+      <!-- Quick Actions -->
+      <p-panel header="Quick Actions">
+        <ng-template pTemplate="icons">
+          <button class="p-panel-header-icon">
+            <span class="pi pi-sparkles"></span>
+          </button>
+        </ng-template>
+        <div class="grid gap-3">
+          <p-button
+            label="Update Status"
+            icon="pi pi-refresh"
+            styleClass="p-button-outlined action-btn"
+            (click)="onUpdateStatus()">
+          </p-button>
+<!--          <p-button-->
+<!--            label="Export"-->
+<!--            icon="pi pi-download"-->
+<!--            styleClass="p-button-outlined action-btn"-->
+<!--            (click)="onExport()">-->
+<!--          </p-button>-->
+        </div>
+
+      </p-panel>
+
+      <!-- Case History -->
+      <p-panel header="Case History">
+        <ng-template pTemplate="icons">
+          <button class="p-panel-header-icon">
+            <span class="pi pi-briefcase"></span>
+          </button>
+        </ng-template>
+        <div class="case-history-container">
+          <div
+            *ngFor="let caseItem of detailData.casesHistory | slice:0:3"
+            class="case-item"
+            (click)="onViewCase(caseItem)">
+            <div class="case-header">
+              <p-tag
+                [value]="caseItem.status"
+                [styleClass]="'status-chip status-' + getStatusColor(caseItem.status)">
+              </p-tag>
+              <span class="smaller-font text-black-alpha-60">{{ caseItem.date_created | date }}</span>
+            </div>
+            <div class="case-details">
+              <p class="case-description smaller-font">Risk Score: {{ caseItem.riskScore }}</p>
+              <p class="case-description smaller-font">Is Fraud: {{ caseItem.is_fraud }}</p>
+              <p class="case-description smaller-font">Added To Blacklist: {{ caseItem.added_to_blacklist }}</p>
+            </div>
+          </div>
+        </div>
+      </p-panel>
+    </div>
+  </div>
+</div>
+
+<!-- Loading State -->
+<app-loading-circular *ngIf="isLoading"></app-loading-circular>
+
+<!-- No Data State -->
+<div class="no-data-container" *ngIf="!detailData && !(isLoading)">
+  <p-message severity="info" text="No customer data available"></p-message>
+</div>
+
+<p-dialog
+  header="{{'viewData' | translate}}"
+  [maximizable]="true"
+  [modal]="true"
+  [(visible)]="modalVisibility"
+  [style]="{width: '75vw'}">
+  <ng-template pTemplate="content">
+    <app-view-data-formatted [data]="selectedCase"></app-view-data-formatted>
+  </ng-template>
+</p-dialog>

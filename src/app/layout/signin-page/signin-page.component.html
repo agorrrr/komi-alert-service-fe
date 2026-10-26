@@ -1,0 +1,155 @@
+<p-toast position="top-center" key="tc"></p-toast>
+<p-confirmDialog [style]="{ width: '450px' }" [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-outlined p-button-secondary" acceptButtonStyleClass="p-button-warning">
+</p-confirmDialog>
+
+<div class="login-container">
+  <!-- Left section with illustration -->
+  <div class="illustration-section">
+    <div class="logo"></div>
+
+    <div class="tagline">
+      <h2>Centralized Alert Engine System</h2>
+      <p>Transform data into action</p>
+    </div>
+
+    <div class="feature-illustration">
+      <!-- Dashboard & Chart Feature -->
+      <div class="dashboard-panel">
+        <div class="panel-header">
+          <div class="panel-dot"></div>
+          <div class="panel-dot"></div>
+          <div class="panel-dot"></div>
+        </div>
+        <div class="chart-container">
+          <div class="chart-title">Alert Engine Summary</div>
+          <div class="chart-bars">
+            <div class="chart-bar bar-1"></div>
+            <div class="chart-bar bar-2"></div>
+            <div class="chart-bar bar-3"></div>
+            <div class="chart-bar bar-4"></div>
+            <div class="chart-bar bar-5"></div>
+            <div class="chart-bar bar-6"></div>
+            <div class="chart-bar bar-7"></div>
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item"></div>
+            <div class="legend-item"></div>
+            <div class="legend-item"></div>
+            <div class="legend-item"></div>
+            <div class="legend-item"></div>
+            <div class="legend-item"></div>
+            <div class="legend-item"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real-Time Transaction Tracking -->
+      <div class="transaction-panel">
+        <div class="transaction-header">
+          <div class="panel-dot"></div>
+          <div class="panel-dot"></div>
+          <div class="panel-dot"></div>
+        </div>
+        <div class="transaction-list">
+          <div class="transaction-item">
+            <div class="transaction-status status-success"></div>
+            <div class="transaction-text"></div>
+          </div>
+          <div class="transaction-item">
+            <div class="transaction-status status-pending"></div>
+            <div class="transaction-text"></div>
+          </div>
+          <div class="transaction-item">
+            <div class="transaction-status status-success"></div>
+            <div class="transaction-text"></div>
+          </div>
+          <div class="transaction-item">
+            <div class="transaction-status status-failed"></div>
+            <div class="transaction-text"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transaction Reconciliation & Audit -->
+      <div class="reconciliation-panel">
+        <div class="reconciliation-header">
+          <div class="panel-dot"></div>
+          <div class="panel-dot"></div>
+          <div class="panel-dot"></div>
+        </div>
+        <div class="reconciliation-content">
+          <div class="reconciliation-row">
+            <div class="row-label"></div>
+            <div class="row-value"></div>
+          </div>
+          <div class="reconciliation-row">
+            <div class="row-label"></div>
+            <div class="row-value"></div>
+          </div>
+          <div class="reconciliation-row">
+            <div class="row-label"></div>
+            <div class="row-value"></div>
+          </div>
+          <div class="match-indicator"></div>
+        </div>
+      </div>
+
+      <!-- Visual elements for decoration -->
+      <div class="floating-dot dot-1"></div>
+      <div class="floating-dot dot-2"></div>
+      <div class="floating-dot dot-3"></div>
+      <div class="connection-line line-1"></div>
+      <div class="connection-line line-2"></div>
+    </div>
+  </div>
+
+  <!-- Right section with login form -->
+  <div class="login-form-section">
+    <div class="login-form-container">
+      <div class="welcome-text">
+        <img [src]="imgPath" alt="Garda Logo" class="signin-logo">
+        <h5 class="signin-welcome-title">Welcome to Alert Engine System</h5>
+        <p class="signup-prompt" *ngIf="appObjectTmp">
+          {{ appObjectTmp.header_app }}
+        </p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="userid">Username</label>
+          <input id="userid" autocomplete="off" type="text" formControlName="userid" placeholder="Masukan Username"
+            pInputText class="p-inputtext-lg w-full" />
+        </div>
+
+        <div class="form-group">
+          <div class="password-header">
+            <label>Password</label>
+            <a (click)="forgotpassword($event)" href="#" class="forgot-link">Forgot Password?</a>
+          </div>
+          <p-password id="secret" autocomplete="off" formControlName="secret" styleClass="p-password-lg w-full"
+            [toggleMask]="true" [feedback]="false" placeholder="Masukan Password"
+            inputStyleClass="p-inputtext-lg w-full">
+          </p-password>
+        </div>
+
+        <div class="buttons-container">
+          <p-button type="button" label="Sign In" icon="pi pi-sign-in" class="signin-button"
+            styleClass="signin-button p-button-lg" [disabled]="!loginForm.valid || isFetching" (onClick)="onSubmit()">
+          </p-button>
+        </div>
+      </form>
+
+      <div class="footer-links"></div>
+
+      <div class="footer-copyright">
+        <div class="company-info">
+          <p class="copyright-text">©2025 Alert Engine Portal.</p>
+        </div>
+        <div class="footer-version" *ngIf="appObjectTmp">
+          <span class="copyright-text">{{ appObjectTmp.footer_app }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

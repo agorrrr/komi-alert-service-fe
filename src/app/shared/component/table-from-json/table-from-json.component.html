@@ -1,0 +1,63 @@
+<p-panel class="bg-white" [header]="listName | translate">
+  <ng-template pTemplate="icons">
+    <button class="p-panel-header-icon">
+      <span class="pi pi-table"></span>
+    </button>
+  </ng-template>
+
+  <p-table
+    *ngIf="data.length > 0; else noData"
+    #dtTrx
+    [resizableColumns]="true"
+    class="my-custom-datatable"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[10, 25, 50, 100]"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    selectionMode="single"
+    responsiveLayout="scroll"
+    [value]="data"
+    [globalFilterFields]="globalFilter"
+  >
+    <ng-template pTemplate="header">
+      <tr class="text-center w-[1%]">
+        <th class="small-font">No</th>
+        <th *ngFor="let header of headers" class="smaller-font">
+          {{ header | translate }}
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+      <tr [pReorderableRow]="rowIndex">
+        <td class="text-center w-[1%] small-font">{{ rowIndex + 1 }}</td>
+
+        <td *ngFor="let column of headers">
+          <!-- Status Tags -->
+          <ng-container *ngIf="isStatusColumn(column)">
+            <p-tag
+              [severity]="getStatusSeverity(item[column])"
+              [value]="item[column]">
+            </p-tag>
+          </ng-container>
+
+          <!-- Regular Content -->
+          <ng-container *ngIf="!isStatusColumn(column)">
+            <div class="flex small-font">
+              <span [ngClass]="{'update-text': hasUpdateFlag(item[column])}">
+                {{ getDisplayValue(item[column], column) }}
+              </span>
+              <span *ngIf="hasUpdateFlag(item[column])" class="flag-text">(UPDATED)</span>
+              <span *ngIf="hasDeleteFlag(item[column])" class="flag-text">(DELETED)</span>
+            </div>
+          </ng-container>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <ng-template #noData>
+    <div class="text-center small-font">No Data</div>
+  </ng-template>
+</p-panel>

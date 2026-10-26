@@ -1,0 +1,31 @@
+image: node:18
+
+pipelines:
+  branches:
+    master:
+      - step:
+          name: Deploy Frontend to VPS
+          image: atlassian/default-image:3
+          script:
+            - echo "🚀 Starting frontend deployment to VPS..."
+
+            # SSH into VPS and deploy frontend
+            - |
+              ssh -o StrictHostKeyChecking=no root@31.97.67.209 << 'EOF'
+                cd /home/alert-engine/poc-komi-alert-service-fe || exit 1
+                
+                echo 'Pulling latest frontend code...'
+                git pull
+                
+                echo 'Installing Node.js dependencies...'
+                npm install
+                
+                echo 'Building frontend...'
+                npm run build
+                
+                echo 'Restarting PM2 frontend...'
+                pm2 restart alert-engine-frontend
+                pm2 save
+                
+                echo '✅ Frontend deployment complete!'
+              EOF

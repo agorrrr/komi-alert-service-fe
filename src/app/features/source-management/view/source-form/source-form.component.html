@@ -1,0 +1,36 @@
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="flex flex-column gap-3">
+  <div class="field">
+    <label for="name" class="block font-medium text-900">Name</label>
+    <input pInputText id="name" formControlName="name" class="w-full" placeholder="Enter source name"
+      [readOnly]="formGroup.disabled" />
+  </div>
+
+  <div class="field">
+    <label for="type" class="block font-medium text-900">Type</label>
+    <p-dropdown id="type" [options]="state.sourceTypes" formControlName="type" optionLabel="label" optionValue="value"
+      placeholder="Select a source type" class="w-full" [style]="{'width':'100%'}" [readonly]="formGroup.disabled">
+    </p-dropdown>
+  </div>
+
+  <div class="field">
+    <label for="secret_key" class="block font-medium text-900">Secret Key (Optional)</label>
+    <div class="p-input-icon-right w-full justify-content-between">
+      <!-- <p-password id="secret_key" class="w-full" formControlName="secret_key"
+        placeholder="Enter secret key (or leave empty)" [toggleMask]="true" [feedback]="false" styleClass="w-full"
+        [disabled]="formGroup.disabled" inputStyleClass="w-full">
+      </p-password> -->
+
+      <!-- <i [class]="showSecret ? 'pi pi-eye' : 'pi pi-eye-slash'" (click)="toggleSecret()" style="cursor: pointer;"></i> -->
+      <input pInputText type="password" id="secret_key" formControlName="secret_key" class="w-full"
+        placeholder="Enter secret key (or leave empty)" [readOnly]="formGroup.disabled" />
+    </div>
+    <small class="block mt-1 text-500">Validation key used for webhooks.</small>
+  </div>
+
+
+  <div class="flex justify-content-end gap-2 mt-4">
+    <button pButton pRipple type="button" label="Cancel" class="p-button-text" (click)="onCancel()"></button>
+    <button pButton pRipple type="submit" label="Save" *ngIf="!formGroup.disabled" [loading]="state.isFormLoading"
+      [disabled]="formGroup.invalid"></button>
+  </div>
+</form>

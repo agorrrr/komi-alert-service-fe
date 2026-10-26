@@ -1,0 +1,40 @@
+<div *ngIf="appState.getCurrentACL?.canRead" class="flex flex-column gap-4">
+  <p-progressBar *ngIf="isLoading" mode="indeterminate" [style]="{'height': '3px'}"></p-progressBar>
+  <div class="col-2 p-0">
+    <app-dashboard-card-summary
+      icon="pi-verified"
+      [label]="'totalWhitelist' | translate"
+      [count]="paginationData.totalRecord">
+    </app-dashboard-card-summary>
+  </div>
+  <app-table-selector
+    [objectName]="headerName"
+    [data]="blacklistAccounts"
+    [fields]="fields"
+    [totalRecord]="paginationData.totalRecord"
+    selectionMode="multiple"
+    (paggingEvent)="onFilter($event)"
+    (addEvent)="onAdd()"
+    (viewEvent)="onView($event)"
+    (updateEvent)="onUpdate($event)"
+    (deleteEvent)="onDelete($event)"
+    (exportEvent)="onExport()"
+  >
+
+  </app-table-selector>
+</div>
+
+
+<p-dialog
+  header="{{headerName}}"
+  [maximizable]="true"
+  [modal]="true"
+  [(visible)]="modalVisibility"
+  [style]="{width: '40vw'}">
+  <ng-template pTemplate="content">
+
+    <app-view-data-formatted *ngIf="modeModal==='VIEW'" [data]="selectedData"></app-view-data-formatted>
+
+    <app-whitelist-acc-form *ngIf="modeModal==='MUTATION'" (cbCloseModal)="onCloseModal()"></app-whitelist-acc-form>
+  </ng-template>
+</p-dialog>

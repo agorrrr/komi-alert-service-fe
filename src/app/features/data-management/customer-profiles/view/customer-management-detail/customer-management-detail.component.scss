@@ -1,0 +1,346 @@
+.customer-detail-container {
+  min-height: 100vh;
+
+  .detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+
+
+    .avatar-section {
+      .customer-avatar {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-weight: 600;
+        font-size: 1rem;
+        text-transform: uppercase;
+        width: 50px;
+        height: 50px;
+      }
+    }
+
+    .risk-score-section {
+      .risk-score-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        //margin: 10px;
+
+        .risk-score-label {
+          display: block;
+          color: #6c757d;
+          font-size: 0.7rem;
+          //margin-bottom: 0.5rem;
+        }
+
+        .risk-score-value {
+          display: flex;
+          margin-left: 5px;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+
+          .score-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+
+            &.score-success {
+              color: #28a745;
+            }
+
+            &.score-warning {
+              color: #ffc107;
+            }
+
+            &.score-danger {
+              color: #dc3545;
+            }
+          }
+
+          .trend-icon {
+            font-size: .9rem;
+          }
+        }
+
+        .risk-trend-text {
+          font-size: 0.6rem;
+          color: #6c757d;
+        }
+      }
+    }
+  }
+
+  .case-history-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .case-item {
+      padding: .5rem;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        border-color: #007bff;
+        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.15);
+      }
+
+      .case-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+
+        .case-number {
+          font-weight: 600;
+          color: #2c3e50;
+        }
+
+        .status-chip {
+          font-size: 0.55rem;
+          padding: 0 0.3rem;
+          font-weight: bold;
+          color: #ffffff;
+
+          &.status-success {
+            background: #22C55E;
+          }
+
+          &.status-warning {
+            background: #F97316;
+          }
+
+          &.status-primary {
+            background: #1c9afb;
+          }
+
+          &.status-secondary {
+            background: #e2e3e5;
+            color: #383d41;
+          }
+        }
+      }
+
+      .case-details {
+        margin-left: 5px;
+
+        .case-date {
+          font-size: 0.65rem;
+          color: #6c757d;
+        }
+
+        .case-description {
+          font-size: 0.75rem;
+          color: #495057;
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 2fr .8fr;
+    gap: 2rem;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: 1fr;
+    }
+
+    .left-column, .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .flags-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+
+      .flag-item {
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+
+        &.active-flag {
+          background: #f8d7da;
+          border-color: #dc3545;
+        }
+
+        &.inactive-flag {
+          background: #f8f9fa;
+          border-color: #e9ecef;
+          opacity: 0.7;
+        }
+
+        .flag-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .flag-name {
+            font-size: .7rem;
+            color: #2c3e50;
+          }
+
+          .remove-flag-btn {
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 0.25rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+
+            &:hover {
+              background: #dc3545;
+              color: white;
+            }
+          }
+        }
+      }
+    }
+
+
+    .section-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+
+      .section-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e9ecef;
+        background: #f8f9fa;
+
+        h3 {
+          margin: 0;
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #2c3e50;
+        }
+      }
+
+      .table-container {
+        padding: 1rem;
+
+        .risk-chip {
+          font-size: 0.75rem;
+          padding: 0.25rem 0.5rem;
+
+          &.risk-success {
+            background: #d4edda;
+            color: #155724;
+          }
+
+          &.risk-warning {
+            background: #fff3cd;
+            color: #856404;
+          }
+
+          &.risk-danger {
+            background: #f8d7da;
+            color: #721c24;
+          }
+        }
+
+        .decision-chip {
+          font-size: 0.75rem;
+          padding: 0.25rem 0.5rem;
+
+          &.decision-success {
+            background: #d4edda;
+            color: #155724;
+          }
+
+          &.decision-warning {
+            background: #fff3cd;
+            color: #856404;
+          }
+
+          &.decision-danger {
+            background: #f8d7da;
+            color: #721c24;
+          }
+        }
+      }
+
+      .chart-container {
+        background: #ffffff;
+        border-radius: 6px;
+        border: 1px solid #e0e6ed;
+        padding-bottom: 5px;
+      }
+
+      .chart-grid {
+        display: grid;
+        gap: 0;
+      }
+
+
+      .action-buttons {
+        padding: 0 !important;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+
+        .action-btn {
+          width: 100%;
+          justify-content: center;
+          padding: 0 !important;
+          border-radius: 8px;
+        }
+      }
+
+
+    }
+  }
+}
+
+.no-data-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  padding: 2rem;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .customer-detail-container {
+    padding: 1rem;
+
+    .detail-header {
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+
+      .customer-info {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+
+    .content-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+
+      .section-card {
+        .action-buttons {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+  }
+}

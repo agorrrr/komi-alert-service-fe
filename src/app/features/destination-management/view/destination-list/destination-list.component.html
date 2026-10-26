@@ -1,0 +1,84 @@
+<div class="flex flex-column gap-2">
+  <app-table-helper-lazy
+    [data]="destinations"
+    [objectName]="headerName"
+    [totalRecord]="paginationData.totalRecord || 0"
+    [fields]="fields"
+    [acl]="permissions"
+    [loadingData]="isLoading"
+    (viewEvent)="onView($event)"
+    (addEvent)="onAdd()"
+    (updateEvent)="onUpdate($event)"
+    (deleteEvent)="onDelete($event)"
+    (paggingEvent)="onPaging($event)"
+  >
+    <form slot="filtering" [formGroup]="filterFormGroup">
+      <div class="grid">
+        <!-- Name -->
+        <div class="col-5">
+          <label class="block text-900 font-medium mb-2">
+            Name
+          </label>
+          <input
+            class="w-full"
+            type="text"
+            pInputText
+            formControlName="name"
+            placeholder="Enter Name">
+        </div>
+
+        <!-- Type -->
+        <div class="col-5">
+          <label class="block text-900 font-medium mb-2">
+            Type
+          </label>
+          <p-dropdown
+            class="w-full"
+            formControlName="type"
+            [options]="state.destinationTypes"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Select Type"
+            [showClear]="true">
+          </p-dropdown>
+        </div>
+
+        <!-- Filter Actions -->
+        <div class="col-12">
+          <div class="flex gap-2 justify-content-end">
+            <p-button
+              label="Reset"
+              icon="pi pi-refresh"
+              severity="secondary"
+              [disabled]="isLoading"
+              [outlined]="true">
+            </p-button>
+            <p-button
+              label="Filter Data"
+              icon="pi pi-search"
+              [loading]="isLoading"
+              type="submit">
+            </p-button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <!-- Custom template for config column -->
+    <ng-template #configTemplate let-row>
+      {{ getChatId(row) }}
+    </ng-template>
+  </app-table-helper-lazy>
+</div>
+
+<p-dialog
+  header="{{isCreation ? 'Add Destination' : (isView ? 'View Destination' : 'Edit Destination')}}"
+  [maximizable]="true"
+  [(visible)]="modalVisibility"
+  [style]="{width: '50vw'}"
+  [modal]="true">
+  <app-destination-form 
+    [isCreation]="isCreation" 
+    (cbSuccess)="onSuccess()">
+  </app-destination-form>
+</p-dialog>

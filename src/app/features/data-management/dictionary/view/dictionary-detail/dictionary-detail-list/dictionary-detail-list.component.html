@@ -1,0 +1,62 @@
+<div class="flex flex-row gap-2 p-0 col-12" *ngIf="appState.getCurrentACL?.canRead">
+  <div class="p-0 col-3 flex flex-column gap-3">
+    <p-panel
+      [toggleable]="true"
+      [header]="'Dictionary Information'"
+      *ngIf="dictionaryDetail?.dictionary?.name">
+      <app-view-data-formatted [data]="dictionaryDetail?.dictionary"></app-view-data-formatted>
+    </p-panel>
+    <app-dashboard-card-summary
+      icon="pi-box"
+      *ngIf="dictionaryDetail?.dictionary?.name"
+      [label]="dictionaryDetail?.dictionary?.name | translate"
+      [count]="dictionaryDetail?.detail?.data?.length || 0"
+    >
+    </app-dashboard-card-summary>
+  </div>
+
+  <div class="col-9 p-0">
+    <ng-container *ngIf="!isCalculation">
+      <app-table-selector
+        [loadingData]="isLoading"
+        [objectName]="headerName"
+        [data]="dictionaryDetail?.detail?.data || []"
+        [totalRecord]="dictionaryDetail?.detail?.data?.length || 0"
+        selectionMode="multiple"
+        (addEvent)="onAdd()"
+        (viewEvent)="onView($event)"
+        (updateEvent)="onUpdate($event)"
+        (deleteEvent)="onDelete($event)"
+        (exportEvent)="onExport()"
+        (importEvent)="onImport()"
+        [enableFilter]="false"
+        [showImportButton]="!isExternal"
+        [hideActionButton]="isExternal"
+        
+        [canView]="false"
+      >
+      </app-table-selector>
+    </ng-container>
+
+    <ng-container *ngIf="isCalculation">
+      <app-table-from-json
+        [listName]="dictionaryDetail?.dictionary?.name"
+        [data]="dictionaryDetail?.detail?.data || []">
+
+      </app-table-from-json>
+    </ng-container>
+  </div>
+
+</div>
+
+<p-dialog
+  header="{{headerName | translate}} {{dictionaryDetail?.dictionary.name}}"
+  [maximizable]="true"
+  [modal]="true"
+  [(visible)]="modalVisibility"
+  [style]="{width: '40vw'}">
+  <ng-template pTemplate="content">
+    <app-dictionary-detail-form *ngIf="modeModal==='MUTATION'"></app-dictionary-detail-form>
+    <app-dictionary-detail-form-import *ngIf="modeModal==='IMPORT'"></app-dictionary-detail-form-import>
+  </ng-template>
+</p-dialog>

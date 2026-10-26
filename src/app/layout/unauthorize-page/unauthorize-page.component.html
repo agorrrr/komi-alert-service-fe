@@ -1,0 +1,14 @@
+
+<div class="grid">
+    <div class="col-12 md:col-12 lg:col-12">
+        <p-panel header="Unauthorized" class="panel-bg" [toggleable]="true">
+            <div class="px-5 min-h-screen-unauthorized flex justify-content-center align-items-center">
+                <div class="z-1 text-center">
+                    <div class="text-900 font-bold text-6xl mb-4">{{receivedData.status ?? '404'}} Oops!</div>
+                    <p class="line-height-3 mt-0 mb-5 text-700 text-xl font-medium">Can't Access Pages</p>
+                    <p-button (keydown.enter)="{}"  (click)="backhome()" styleClass="merapi-button font-medium p-button-raised">Go to Dashboard</p-button>
+                </div>
+            </div>
+        </p-panel>
+    </div>
+</div>

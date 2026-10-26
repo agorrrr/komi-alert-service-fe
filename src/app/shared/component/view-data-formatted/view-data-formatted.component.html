@@ -1,0 +1,102 @@
+<div class="p-0 m-0 text-black-alpha-90">
+  <div class="grid {{ getGridCols() }} gap-2 w-full">
+    <!-- Information Section -->
+    <div class="{{hasArrayData() ? 'col-5' : 'col-12'}}">
+      <!-- Regular Data Section -->
+      <div *ngIf="hasRegularData()" class="col">
+        <div *ngFor="let item of transformedData"
+             class="flex items-start gap-1 p-1 rounded hover:bg-black-alpha-10 transition-colors">
+          <div class="flex-1 min-w-0">
+            <div class="flex flex-column sm:flex-row sm:items-center gap-0">
+              <span class="font-semibold  smaller-font {{ widthLabel }} flex-shrink-0">
+                {{ item.key | translate }}
+              </span>
+              <span class="text-black smaller-font {{ widthValue }}">
+                <ng-container *ngIf="isDateField(item.key); else normalValue">
+                  {{ item.value | date: 'dd MMMM yyyy, HH:mm' }}
+                </ng-container>
+                <ng-template #normalValue>
+                  <ng-container *ngIf="item.key !=='status'">{{ formatValue(item) }}</ng-container>
+                  <p-tag *ngIf="item.key === 'status' "
+                         [value]="getValueStatus(item.value)"
+                         [severity]="getSeverityStatus(item.value)"></p-tag>
+                </ng-template>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nested Objects Section with Unlimited Depth -->
+      <div *ngIf="hasNestedObjects()" class="col">
+        <div *ngFor="let item of nestedObjectData">
+          <!-- Parent Container (Header) -->
+          <div *ngIf="isParentContainer(item)"
+               class="flex items-start gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors mb-1 "
+               [ngStyle]="getIndentationStyle(item.level)">
+            <div class="flex-1 min-w-0">
+              <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+                <span class="font-semibold smaller-font flex-shrink-0 text-blue-600">
+                  {{ item.key | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Leaf Value -->
+          <div *ngIf="!isParentContainer(item)"
+               class="flex items-start gap-3 p-1 rounded-lg hover:bg-gray-50 transition-colors mb-1"
+               [ngStyle]="getIndentationStyle(item.level)">
+            <div class="flex-1 min-w-0">
+              <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+                <span class="font-semibold  smaller-font {{ widthLabel }} flex-shrink-0">
+                  {{ item.key | translate }}
+                </span>
+                <span class=" break-words smaller-font {{ widthValue }}">
+                  <ng-container *ngIf="isDateField(item.key); else nestedNormalValue">
+                    {{ item.value | date: 'dd MMMM yyyy, HH:mm' }}
+                  </ng-container>
+                  <ng-template #nestedNormalValue>
+                    {{ formatNestedValue(item) }}
+                  </ng-template>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Who/When Data Section-->
+      <div *ngIf="canShowMetadata()" class="col">
+        <div *ngFor="let item of whoWhenData" class="flex flex-row  gap-0 p-1 rounded hover:bg-black-alpha-10 transition-colors">
+<!--          <i class="pi {{ item.icon }} text-gray-500 mt-1"></i>-->
+          <div class="flex-1 min-w-0">
+            <div class="flex flex-row gap-1">
+              <span class="font-semibold  small-font {{ widthLabel }} flex-shrink-0">
+                {{ item.label | translate }}
+              </span>
+              <span class="text-black break-words small-font {{ widthValue }}">
+                <ng-container *ngIf="isDateField(item.key); else metaValue">
+                  {{ item.value | date: 'dd MMMM yyyy, HH:mm' }}
+                </ng-container>
+                <ng-template #metaValue>
+                {{ item.value || '-' }}
+                </ng-template>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Array Data Section -->
+    <div *ngIf="hasArrayData()" class="col w-[50%]">
+      <ng-container *ngFor="let item of arrayData">
+        <app-table-from-json
+          [listName]="item.key"
+          [data]="item.value">
+        </app-table-from-json>
+      </ng-container>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,97 @@
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" [baseZIndex]="10000"></p-confirmDialog>
+<p-toast></p-toast>
+<p-toast position="top-center" key="tc"></p-toast>
+
+
+<div class="container max-w-full">
+  <div class="sidebar-overlay" [class.active]="isMobileSidebarOpen" (click)="closeMobileSidebar()"></div>
+  <div class="sidebar transition-all duration-300" [class.collapsed]="isCollapsed" [class.mobile-open]="isMobileSidebarOpen">
+    <div class="flex justify-content-center mt-4 mb-3">
+      <a href="/">
+        <img ngSrc="assets/images/fds-logo.png" alt="garda-fds" height="50" width="100">
+      </a>
+    </div>
+    <div *ngIf="isFetchMenu" class="text-center px-[30px]">
+      <span class="text-black">Loading&nbsp;&nbsp;<i class="pi pi-spin pi-spinner"></i></span>
+    </div>
+    <div *ngIf="!isFetchMenu" class="py-2 sidebarcontent">
+      <p-panelMenu *ngIf="!isCollapsed" [model]="sideMenus" styleClass="w-full md:w-80" [multiple]="false">
+        <ng-template #item let-item>
+          <ng-container *ngIf="item.routerLink; else module">
+            <a [routerLink]="item.routerLink" class="flex align-items-center
+                  cursor-pointer text-[#667085] px-3 py-2 transition-all duration-300" routerLinkActive="active-menu">
+              <span [class]="item.icon" class="ic-navbar"></span>
+              <span class="ml-2 text-[#667085] transition-all duration-300" [style]="{'font-size': '0.72rem'}">{{
+                item.label }}</span>
+            </a>
+          </ng-container>
+          <ng-template #module>
+            <a *ngIf="item.url; else noLink" [routerLink]="item.url" routerLinkActive="active-menu"
+              class="flex items-center cursor-pointer text-surface-700 dark:text-surface-0 px-4 py-2 hover:bg-gray-300 transition-all duration-300">
+              <span [class]="item.icon" class="ic-navbar-header"></span>
+              <span class="ml-2 text-[#667085]" [style]="{'font-size': '0.72rem'}">{{ item.label }}</span>
+            </a>
+          </ng-template>
+          <ng-template #noLink>
+            <span
+              class="flex flex-row justify-content-center align-items-center cursor-pointer text-surface-700 dark:text-surface-0 px-4 py-2 hover:bg-gray-300 transition-all duration-300">
+              <span [class]="item.icon" class="ic-navbar-header"></span>
+              <span class="ml-2 text-[#667085]" [style]="{'font-size': '0.72rem'}">{{ item.label }}</span>
+              <i *ngIf="item.items"
+                class="pi pi-angle-down ml-auto text-[#667085] submenu-toggler transition-all duration-300"></i>
+            </span>
+          </ng-template>
+        </ng-template>
+      </p-panelMenu>
+    </div>
+    <div *ngIf="isCollapsed" style="text-align: center;" class="w-full">
+      <ul>
+        <li *ngFor="let item of sideModuleOnly">
+          <p-button icon="{{item.icon}}" styleClass="p-button-rounded merapi-rounded-button" [rounded]=true
+            [text]="false" (onClick)="expandFileMenu(item.label)" [pTooltip]="item.label|translate"
+            tooltipPosition="right"></p-button>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content transition-all duration-300" [class.collapsed]="isCollapsed">
+    <header class="mb-2">
+      <p-menubar styleClass="bg-white p-0 m-0 ">
+        <ng-template #start>
+          <p-button *ngIf="isCollapsed" icon="pi pi-bars" (onClick)="toggleSidebarResponsive()"
+            styleClass="rounded-full! w-10 h-10 flex items-center justify-center bg-transparent border-0 hover:bg-[#F1F5F9]! transition-colors"></p-button>
+          <p-button *ngIf="!isCollapsed" icon="pi pi-bars" (onClick)="toggleSidebarResponsive()"
+            styleClass="rounded-full! w-10 h-10 flex items-center justify-center bg-transparent border-0 hover:bg-[#F1F5F9]! transition-colors"></p-button>
+          <p-breadcrumb styleClass="" class="max-w-full" [model]="navigations" [home]="home"></p-breadcrumb>
+        </ng-template>
+        <ng-template #end>
+          <div class="flex header-text text-center items-center content-center self-center justify-center">
+            <!-- <div class="flex items-center justify-center gap-2 cursor-pointer" (click)="language.toggle($event)">
+              <p-avatar image="{{selectedLanguage.path}}" shape="square" (keydown.alt)="menu.toggle($event)"
+                styleClass=" border-round-md! border-cyan-500 border-rounded border-0 w-5! h-4!">
+              </p-avatar>
+              <span class="small-font">{{ selectedLanguage.code.toUpperCase() }}</span>
+            </div> -->
+            <p-menu #language [model]="langList" [popup]="true" appendTo="body" class="mr-3">
+            </p-menu>
+            <p-menu #menu [model]="items" appendTo="body" [popup]="true"></p-menu>
+            <div *ngIf="isLogged" class="flex flex-row items-center justify-center " style="text-decoration: none;">
+              <div class="flex flex-row gap-2 items-center">
+                <!-- <p-button (click)="navigateMyTask()" title="My Task" icon="pi pi-list-check"
+                  styleClass="rounded-full!  flex items-center justify-center p-0 bg-transparent border-0 hover:bg-[#F1F5F9]! transition-colors"></p-button>
+                <p-button (click)="navigateNotification()" title="Manage Notification" icon="pi pi-bell"
+                          styleClass="rounded-full!  flex items-center justify-center p-0 bg-transparent border-0 hover:bg-[#F1F5F9]! transition-colors"></p-button>
+ -->
+                <p-avatar [style]="{cursor: 'pointer'}" icon="pi pi-user" shape="square" size="normal"
+                  (keydown.enter)="menu.toggle($event)" (click)="menu.toggle($event)"
+                  styleClass="border-cyan-500 border-0 p-0">
+                </p-avatar>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </p-menubar>
+    </header>
+    <router-outlet></router-outlet>
+  </div>
+</div>

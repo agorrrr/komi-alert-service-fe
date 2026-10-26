@@ -1,0 +1,78 @@
+<div *ngIf="appState.getCurrentACL?.canRead" class="flex flex-column gap-4">
+  <app-table-helper-lazy
+    [data]="dictionaries"
+    [objectName]="headerName"
+    [totalRecord]="paginationData.totalRecord || 0"
+    [fields]="fields"
+    [loadingData]="isLoading"
+    (viewEvent)="onView($event)"
+    (addEvent)="onAdd()"
+    (updateEvent)="onUpdate($event)"
+    (deleteEvent)="onDelete($event)">
+    <form slot="filtering" [formGroup]="filterFormGroup" (ngSubmit)="state.getDictionariesAPI()" class="p-fluid">
+      <div class="grid">
+        <!-- Name -->
+        <div class="col-6">
+          <label for="name" class="block text-900 font-medium mb-2">
+            {{ 'name'|translate }}
+          </label>
+          <input
+            id="name"
+            type="text"
+            pInputText
+            formControlName="name"
+            placeholder="Enter Name"
+            class="w-full">
+        </div>
+
+        <!-- Type Dropdown -->
+        <div class="col-6">
+          <label for="type" class="block text-900 font-medium mb-2">
+            {{ 'type'|translate }}
+          </label>
+          <p-dropdown
+            id="type"
+            formControlName="type"
+            [options]="state.typeList"
+            optionLabel="label"
+            optionValue="value"
+            [showClear]="true"
+            placeholder="Select Dictionary Type"
+            class="w-full">
+          </p-dropdown>
+        </div>
+
+        <!-- Filter Actions -->
+        <div class="col-12">
+          <div class="flex gap-2 justify-content-end mt-3">
+            <p-button
+              label="Reset"
+              icon="pi pi-refresh"
+              severity="secondary"
+              (onClick)="state.clearFilter()"
+              [disabled]="isLoading"
+              [outlined]="true">
+            </p-button>
+            <p-button
+              label="Filter Data"
+              icon="pi pi-search"
+              [loading]="isLoading"
+              type="submit">
+            </p-button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </app-table-helper-lazy>
+</div>
+
+<p-dialog
+  header="{{headerName}}"
+  [maximizable]="true"
+  [modal]="true"
+  [(visible)]="modalVisibility"
+  [style]="{width: '70vw'}">
+  <ng-template pTemplate="content">
+    <app-dictionary-form></app-dictionary-form>
+  </ng-template>
+</p-dialog>

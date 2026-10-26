@@ -1,0 +1,227 @@
+<p-card>
+  <div style="padding: 10px 10px 20px 10px">
+    <p-table
+      #dtTrx
+      [value]="data"
+      styleClass="p-datatable-striped p-datatable-sm "
+      [scrollable]="true"
+      [resizableColumns]="true"
+      [loading]="loading"
+      [globalFilterFields]="globalFilter"
+      class="my-custom-datatable"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex px-2 py-2">
+          <h3 style="margin: 0; padding: 0">{{ objectName | translate }}</h3>
+          <span class="p-input-icon-left ml-auto">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              [(ngModel)]="filterValue"
+              (input)="onSearchInput()"
+              placeholder="{{ 'search' | translate }}..."
+            />&nbsp;
+            <button
+              class="custom-pTooltip"
+              [loading]="loading"
+              (click)="refresh($event)"
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-refresh"
+              pTooltip="Refresh Your Data"
+              tooltipPosition="left"
+              class="p-button-sm merapi-button-secondary p-1"
+            ></button>
+          </span>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th id="no" style="text-align: center; width: 5%">No</th>
+          <ng-container *ngFor="let header of fields">
+            <th
+              [ngStyle]="{ 'text-align': header.align, width: header.width }"
+              [pSortableColumn]="header.key"
+            >
+              <p-sortIcon [field]="header.key"></p-sortIcon>
+              {{ header.key | translate }}
+            </th>
+          </ng-container>
+          <th
+            alignFrozen="right"
+            pFrozenColumn
+            [frozen]="true"
+            style="text-align: center; width: 12%"
+            *ngIf="acl.create == '1' || acl.view == '1'"
+          >
+            {{ "Action" | translate }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+        <tr>
+          <td style="text-align: center; width: 5%">
+            {{ page * rows + rowIndex + 1 }}
+          </td>
+          <ng-container *ngFor="let column of fields; let last = last">
+            <td [ngStyle]="{ 'text-align': column.align, width: column.width }">
+              <div *ngIf="column.type == 'text'">
+                <label [for]="item[column.key]">{{ item[column.key] }}</label>
+              </div>
+              <div *ngIf="column.type == 'date'">
+                <label [for]="item[column.key]">{{
+                  item[column.key] | date : "dd/MM/yyyy HH:mm"
+                }}</label>
+              </div>
+              <div *ngIf="column.type == 'tag'">
+                <p-tag
+                  *ngIf="getStatusTag(item, 'status')"
+                  [severity]="getStatusTag(item, 'status')?.severity"
+                  [value]="getStatusTag(item, 'status')?.value"
+                >
+                </p-tag>
+              </div>
+            </td>
+          </ng-container>
+          <td
+            alignFrozen="right"
+            pFrozenColumn
+            [frozen]="true"
+            style="text-align: right"
+            *ngIf="acl.create == '1' || acl.view == '1'"
+          >
+            <button
+              pButton
+              pRipple
+              *ngIf="
+                acl.create == '1' &&
+                checkStatus(item.status, 'submit') &&
+                !monitorPage
+              "
+              type="button"
+              icon="pi pi-plius"
+              class="p-button-sm merapi-button-view p-1"
+              (click)="submitData(item)"
+            >
+              &nbsp;{{ "Submit" | translate }}
+            </button>
+            <button
+              pButton
+              pRipple
+              *ngIf="acl.create == '1' && checkStatus(item.status, 'preview')"
+              type="button"
+              icon="pi pi-search"
+              class="p-button-sm merapi-button-view p-1"
+              (click)="previewData(item)"
+            >
+              &nbsp;{{ "Preview" | translate }}
+            </button>
+            <button
+              pButton
+              pRipple
+              *ngIf="
+                (acl.create == '1' || acl.view == '1') &&
+                checkStatus(item.status, 'download')
+              "
+              type="button"
+              icon="pi pi-download"
+              class="p-button-sm merapi-button-edit p-1"
+              (click)="downloadRequest(item)"
+            >
+              &nbsp;{{ "Request" | translate }}
+            </button>
+            <button
+              pButton
+              pRipple
+              *ngIf="
+                (acl.create == '1' || acl.view == '1') &&
+                checkStatus(item.status, 'download')
+              "
+              type="button"
+              icon="pi pi-download"
+              class="p-button-sm merapi-button-edit p-1"
+              (click)="downloadResponse(item)"
+            >
+              &nbsp;{{ "Response" | translate }}
+            </button>
+            <button
+              pButton
+              pRipple
+              *ngIf="
+                acl.create == '1' &&
+                checkStatus(item.status, 'cancel') &&
+                !monitorPage
+              "
+              type="button"
+              icon="pi pi-trash"
+              class="p-button-sm merapi-button-delete p-1"
+              (click)="cancelConfirm(item)"
+            >
+              &nbsp;{{ "Cancel" | translate }}
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td
+            colspan="14"
+            style="text-align: center; padding-top: 10px; padding-bottom: 10px"
+          >
+            {{ "noDataFound" | translate }}.
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <div class="w-full py-3" style="display: grid; place-items: center">
+      <div class="grid w-full p-fluid">
+        <div class="col-3">
+          <div class="grid py-1">
+            <div class="col-5 flex align-items-center justify-content-start">
+              <p style="font-size: 13.43px; font-weight: 400">
+                {{ "pageRecord" | translate }}
+              </p>
+            </div>
+            <div class="col-7 my-custom-datatable">
+              <p-selectButton
+                [options]="rowtable"
+                optionLabel="label"
+                [(ngModel)]="rowsPerPage"
+                (onChange)="changeRowsPerPage($event)"
+                optionValue="value"
+              ></p-selectButton>
+            </div>
+          </div>
+        </div>
+        <div
+          class="col-9"
+          style="
+            display: flex;
+            justify-content: flex-end;
+            margin: 0;
+            padding: 0;
+          "
+        >
+          <p-paginator
+            [style]="{ 'margin-bottom': '4.5rem' }"
+            (onPageChange)="paggingData($event)"
+            [first]="first"
+            [rows]="rows"
+            [totalRecords]="totalRecord"
+            [rowsPerPageOptions]="[10, 25, 50, 100]"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="{first} {{ 'to' | translate }} {last} {{
+              'of' | translate
+            }} {totalRecords} {{ 'entries' | translate }}"
+            class="my-custom-datatable"
+          >
+          </p-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-card>

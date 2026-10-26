@@ -1,0 +1,20 @@
+<div class="grid nogutter" *ngIf="data.value != null">
+    <!-- <p-divider styleClass="m-0"></p-divider> -->
+        <div [class]="'p-2 col-'+(widthLabel ? widthLabel : 5)">
+            <label for="description">{{data.key|translate}}</label>
+        </div>
+        
+        <div [class]="'col-'+(widthValue ? widthValue : 7)">
+            <div *ngIf="data.key != 'Status Users'">
+                <label for="description">: {{ data.value | translate}}</label>
+            </div>
+           
+            <div *ngIf="data.key == 'Status Users'">: 
+                <p-tag *ngIf="data.value == '0'" severity="danger" value="{{'Pending Verification'}}"></p-tag>
+                <p-tag *ngIf="data.value == '1'" severity="success" value="{{'Active'}}"></p-tag>
+                <p-tag *ngIf="data.value == '2'" severity="danger" value="{{'Block'}}"></p-tag>
+                <p-tag *ngIf="data.value == '3'" severity="danger" value="{{'Reset Password'}}"></p-tag>
+            </div>
+        </div>
+    <!-- <p-divider styleClass="m-0"></p-divider> -->
+</div>

@@ -1,0 +1,120 @@
+<div class="flex flex-column gap-2">
+  <div class="grid justify-content-between p-2 ">
+    <app-dashboard-card-summary [label]="'totalCustomer' | translate"
+                                [count]="customer?.customerSummary?.totalCustomer"
+                                icon="pi-user"></app-dashboard-card-summary>
+    <app-dashboard-card-summary [label]="'allowedCustomer' | translate"
+                                [count]="customer?.customerSummary?.allowedCustomer"
+                                icon="pi-verified"></app-dashboard-card-summary>
+    <app-dashboard-card-summary [label]="'flaggedCustomer' | translate"
+                                [count]="customer?.customerSummary?.flaggedCustomer"
+                                icon="pi-bookmark"></app-dashboard-card-summary>
+    <app-dashboard-card-summary [label]="'blockedCustomer' | translate"
+                                [count]="customer?.customerSummary?.blockedCustomer"
+                                icon="pi-ban"></app-dashboard-card-summary>
+  </div>
+
+  <app-table-helper-lazy
+    [data]="customer?.customerList"
+    [objectName]="headerName"
+    [totalRecord]="paginationData.totalRecord || 0"
+    [fields]="fields"
+    [loadingData]="isLoading"
+    (viewEvent)="onView($event)"
+    (addEvent)="onAdd()"
+    (updateEvent)="onUpdate($event)"
+    (deleteEvent)="onDelete($event)"
+    (paggingEvent)="onPaging($event)"
+    (statusEvent)="onChangeStatus($event)"
+  >
+    <form slot="filtering" [formGroup]="filterFormGroup" (ngSubmit)="state.applyFilter()">
+      <div class="grid">
+        <!-- Name -->
+        <div class="col-5">
+          <label class="block text-900 font-medium mb-2">
+            {{ 'customerName'|translate }}
+          </label>
+          <input
+            class="w-full"
+            type="text"
+            pInputText
+            formControlName="name"
+            placeholder="Enter Customer Name">
+        </div>
+
+        <!-- CIF -->
+        <div class="col-5">
+          <label class="block text-900 font-medium mb-2">
+            {{ 'cif'|translate }}
+          </label>
+          <input
+            class="w-full"
+            type="text"
+            pInputText
+            formControlName="cif"
+            placeholder="Enter CIF">
+        </div>
+
+        <!-- Source Account Number -->
+        <div class="col-5">
+          <label class="block text-900 font-medium mb-2">
+            {{ 'accountNo'|translate }}
+          </label>
+          <input
+            class="w-full"
+            id="sourceAccountNumber"
+            type="text"
+            pInputText
+            formControlName="accountNo"
+            placeholder="Enter Account number">
+        </div>
+
+        <!-- Status Dropdown -->
+        <div class="col-5">
+          <label for="status" class="block text-900 font-medium mb-2">
+            {{ 'status'|translate }}
+          </label>
+          <p-dropdown
+            class="w-full"
+            id="status"
+            formControlName="status"
+            [options]="state.status"
+            optionLabel="label"
+            optionValue="value"
+            [showClear]="true"
+            placeholder="Select status">
+          </p-dropdown>
+        </div>
+
+        <!-- Filter Actions -->
+        <div class="col-12">
+          <div class="flex gap-2 justify-content-end">
+            <p-button
+              label="Reset"
+              icon="pi pi-refresh"
+              severity="secondary"
+              (onClick)="state.clearFilter()"
+              [disabled]="isLoading"
+              [outlined]="true">
+            </p-button>
+            <p-button
+              label="Filter Data"
+              icon="pi pi-search"
+              [loading]="isLoading"
+              type="submit">
+            </p-button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </app-table-helper-lazy>
+</div>
+
+<p-dialog
+  header="{{headerName}}"
+  [maximizable]="true"
+  [(visible)]="modalVisibility"
+  [style]="{width: '60vw'}"
+  [modal]="true">
+  <app-customer-management-edit *ngIf="!isCreation" (cbSuccess)="onSuccess()"></app-customer-management-edit>
+</p-dialog>

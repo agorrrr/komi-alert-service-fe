@@ -1,0 +1,230 @@
+<p-card>
+    <div style="padding: 10px 10px 20px 10px;">
+        <p-table #dtTrx [value]="data" styleClass="p-datatable-striped p-datatable-sm" [paginator]="true"
+            [resizableColumns]="true" [showCurrentPageReport]="true"
+            currentPageReportTemplate="{first} {{'to'|translate}} {last} {{'of'|translate}} {totalRecords} {{'entries'|translate}}"
+            [globalFilterFields]="globalFilter" [rowsPerPageOptions]="[10, 25, 50,100]" [rows]="rowsPerPage"
+            class="my-custom-datatable">
+
+            <ng-template pTemplate="caption">
+                <div class="flex px-2 py-2">&nbsp;
+                    <h2 class="h2-ptbale-header-text" style="margin: 0; padding: 5px 0 0 0;">{{objectName|translate}}
+                    </h2>
+                    <span class="p-input-icon-left ml-auto">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text"
+                            (input)="dtTrx.filterGlobal($any($event.target).value, 'contains')"
+                            placeholder="{{'search'|translate}}..." />&nbsp;
+                        <!-- FIXED: supports both acl.create=='1' (old) and acl.canCreate==true (new) -->
+                        <button pButton type="button"
+                            *ngIf="(acl.create == '1' || acl.canCreate === true) && router.url != '/monitor/job'"
+                            label="{{'btnAdd'|translate}}  {{objectName|translate}}" (click)="addData()"
+                            class="p-button p-button-md btn-header-tbl">
+                        </button>
+                    </span>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="paginatorleft" class="w-full" let-state>
+                <div class="py-1"></div>
+                <div class="grid grid-nogutter">
+                    <div class="col-3 flex align-items-center justify-content-start"
+                        style="text-align: start; width: 20%;">
+                        <span
+                            style="padding-left: 10px; font-size: 13.43px; font-weight: 400;">{{'pageRecord'|translate}}</span>
+                    </div>
+                    <div class="col-9">
+                        <p-selectButton [options]="rowtable" optionLabel="label" [(ngModel)]="rowsPerPage"
+                            (onChange)="changeRowsPerPage($event)" optionValue="value">
+                        </p-selectButton>
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th id="no" *ngIf="!hideNo" style="text-align: center; width: 5%">No</th>
+                    <ng-container *ngFor="let header of fields">
+                        <th [ngStyle]="{ 'text-align': header.align, 'width': header.width }"
+                            [pSortableColumn]="header.key">
+                            <p-sortIcon [field]="header.key"></p-sortIcon>
+                            {{ (header.label ? header.label : header.key) | translate }}
+                        </th>
+                    </ng-container>
+                    <!-- FIXED: supports both acl formats -->
+                    <th alignFrozen="right" pFrozenColumn [frozen]="true" style="text-align: center; width: 12%"
+                        *ngIf="acl.view == '1' || acl.update == '1' || acl.delete == '1' || acl.canView === true || acl.canUpdate === true || acl.canDelete === true">
+                        {{'action'|translate}}
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+                <tr style="font-size: 12px;">
+                    <td *ngIf="!hideNo" style="text-align: center; width: 5%">
+                        {{ rowIndex + 1 }}
+                    </td>
+
+                    <ng-container *ngFor="let column of fields; let last = last">
+                        <td [ngStyle]="{ 'text-align': column.align, 'width': column.width }">
+                            <div *ngIf="column.type == 'text'">
+                                <label [for]="item[column.key]">{{ item[column.key] }}</label>
+                            </div>
+                            <div *ngIf="column.type == 'date'">
+                                <label [for]="item[column.key]">{{ item[column.key] | date: 'dd/MM/yyyy HH:mm'
+                                    }}</label>
+                            </div>
+                            <div *ngIf="column.type == 'currency'">
+                                <label [for]="item[column.key]">{{ item[column.key] | currency:'Rp ':'symbol':'1.2-2'
+                                    }}</label>
+                            </div>
+                            <div *ngIf="column.type == 'tag-yes-no'">
+                                <p-tag *ngIf="item[column.key] == 'Yes'" severity="success" value="Yes"
+                                    [style]="{'width':'90px'}"></p-tag>
+                                <p-tag *ngIf="item[column.key] == 'No'" severity="danger" value="No"
+                                    [style]="{'width':'90px'}"></p-tag>
+                            </div>
+                            <div *ngIf="column.type == 'tag'">
+                                <p-tag *ngIf="item[column.key] == 'Pending Verification'" severity="danger"
+                                    value="Pending Verification"></p-tag>
+                                <p-tag *ngIf="item[column.key] == 'Reset Password'" severity="danger"
+                                    value="Reset Password"></p-tag>
+                                <p-tag *ngIf="item[column.key] == 'Active'" severity="success" value="Active"
+                                    [style]="{'width':'90px'}"></p-tag>
+                                <p-tag *ngIf="item[column.key] == 'Inactive'" severity="danger" value="Inactive"
+                                    [style]="{'width':'90px'}"></p-tag>
+                                <p-tag *ngIf="item[column.key] == 'Y'" severity="success" value="Active"
+                                    [style]="{'width':'90px'}"></p-tag>
+                                <p-tag *ngIf="item[column.key] == 'N'" severity="danger" value="Inactive"
+                                    [style]="{'width':'90px'}"></p-tag>
+                                <p-tag *ngIf="item[column.key] == 'SUCCESS'" severity="success" value="SUCCESS"
+                                    [style]="{'width':'90px'}"></p-tag>
+                                <p-tag *ngIf="item[column.key] == 'A'" severity="success" value="Active"></p-tag>
+                                <p-tag *ngIf="item[column.key] == 'B'" severity="danger" value="Block"></p-tag>
+                                <p-tag *ngIf="item[column.key] == 'C'" severity="danger" value="Close"></p-tag>
+                                <p-tag *ngIf="item[column.key] == 'Block'" severity="danger" value="Block"></p-tag>
+                                <p-tag *ngIf="item[column.key] == 'Closed'" severity="danger" value="Close"></p-tag>
+                                <p-tag *ngIf="item[column.key] == '0'" severity="danger"
+                                    value="Pending Verification"></p-tag>
+                                <p-tag *ngIf="item[column.key] == '1'" severity="success" value="Active"></p-tag>
+                                <p-tag *ngIf="item[column.key] == '2'" severity="danger" value="Block"></p-tag>
+                                <p-tag *ngIf="item[column.key] == '3'" severity="danger" value="Reset Password"></p-tag>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <!-- FIXED: single action td, supports both acl formats, all button groups have flex -->
+                    <td alignFrozen="right" pFrozenColumn [frozen]="true" style="text-align: center;"
+                        *ngIf="acl.view == '1' || acl.update == '1' || acl.delete == '1' || acl.canView === true || acl.canUpdate === true || acl.canDelete === true">
+
+                        <!-- NON-company user path -->
+                        <ng-container *ngIf="!metadata.isCompanyUser">
+
+                            <!-- Standard (no bankOu restriction) — FIXED: added flex wrapper -->
+                            <div *ngIf="bankOu == false || bankOu == null"
+                                style="display: flex; gap: 4px; justify-content: center; align-items: center;">
+                                <button pButton pRipple *ngIf="acl.view == '1' || acl.canView === true" type="button"
+                                    icon="pi pi-search" class="p-button-sm merapi-button-view p-1"
+                                    (click)="viewData(item)">
+                                    &nbsp;{{'view'|translate}}
+                                </button>
+                                <button pButton pRipple
+                                    *ngIf="(acl.update == '1' || acl.canUpdate === true) && router.url != '/monitor/job' && router.url != '/business/company'"
+                                    type="button" icon="pi pi-pencil" class="p-button-sm merapi-button-edit p-1"
+                                    (click)="editData(item)">
+                                    &nbsp;{{'edit'|translate}}
+                                </button>
+                                <button pButton pRipple
+                                    *ngIf="(acl.delete == '1' || acl.canDelete === true) && router.url != '/settings/configuration'"
+                                    type="button" icon="pi pi-trash" class="p-button-sm merapi-button-delete p-1"
+                                    (click)="deleteConfirm(item)">
+                                    &nbsp;{{'delete'|translate}}
+                                </button>
+                            </div>
+
+                            <!-- bankOu restriction path — FIXED: added flex wrapper -->
+                            <div *ngIf="bankOu == true"
+                                style="display: flex; gap: 4px; justify-content: center; align-items: center;">
+                                <button pButton pRipple *ngIf="acl.view == '1' || acl.canView === true" type="button"
+                                    icon="pi pi-search" class="p-button-sm merapi-button-view p-1"
+                                    (click)="viewData(item)">
+                                    &nbsp;{{'view'|translate}}
+                                </button>
+                                <button pButton pRipple
+                                    *ngIf="metadata.oucode == item.bankOu && (acl.update == '1' || acl.canUpdate === true) && router.url != '/monitor/job' && item.status_code != 'C'"
+                                    type="button" icon="pi pi-pencil" class="p-button-sm merapi-button-edit p-1"
+                                    (click)="editData(item)">
+                                    &nbsp;{{'edit'|translate}}
+                                </button>
+                                <button pButton pRipple
+                                    *ngIf="metadata.oucode == item.bankOu && (acl.delete == '1' || acl.canDelete === true) && router.url != '/settings/configuration' && router.url != '/business/company' && router.url != '/monitor/job'"
+                                    type="button" icon="pi pi-trash" class="p-button-sm merapi-button-delete p-1"
+                                    (click)="deleteConfirm(item)">
+                                    &nbsp;{{'delete'|translate}}
+                                </button>
+                                <button pButton pRipple
+                                    *ngIf="(metadata.oucode != item.bankOu && (acl.update == '1' || acl.canUpdate === true) && router.url != '/monitor/job') || (item.status_code == 'C' && (acl.update == '1' || acl.canUpdate === true))"
+                                    type="button" icon="pi pi-pencil" class="p-button-sm merapi-button-edit p-1"
+                                    (click)="showAlert(item)">
+                                    &nbsp;{{'edit'|translate}}
+                                </button>
+                                <button pButton pRipple
+                                    *ngIf="metadata.oucode != item.bankOu && (acl.delete == '1' || acl.canDelete === true) && router.url != '/business/company' && router.url != '/settings/configuration' && router.url != '/monitor/job'"
+                                    type="button" icon="pi pi-trash" class="p-button-sm merapi-button-delete p-1"
+                                    (click)="showAlert(item)">
+                                    &nbsp;{{'delete'|translate}}
+                                </button>
+                            </div>
+
+                        </ng-container>
+
+                        <!-- Company user path — FIXED: added flex wrapper, removed duplicate block -->
+                        <ng-container *ngIf="metadata.isCompanyUser">
+                            <div style="display: flex; gap: 4px; justify-content: center; align-items: center;">
+                                <button pButton pRipple *ngIf="acl.view == '1' || acl.canView === true" type="button"
+                                    icon="pi pi-search" class="p-button-sm merapi-button-view p-1"
+                                    (click)="viewData(item)">
+                                    &nbsp;{{'view'|translate}}
+                                </button>
+                                <button pButton pRipple
+                                    *ngIf="metadata.oucode == 'ALL' && (acl.update == '1' || acl.canUpdate === true) && router.url != '/monitor/job' && item.status_code != 'C'"
+                                    type="button" icon="pi pi-pencil" class="p-button-sm merapi-button-edit p-1"
+                                    (click)="editData(item)">
+                                    &nbsp;{{'edit'|translate}}
+                                </button>
+                                <button pButton pRipple
+                                    *ngIf="metadata.oucode == 'ALL' && (acl.delete == '1' || acl.canDelete === true) && router.url != '/settings/configuration' && router.url != '/business/company' && router.url != '/monitor/job'"
+                                    type="button" icon="pi pi-trash" class="p-button-sm merapi-button-delete p-1"
+                                    (click)="deleteConfirm(item)">
+                                    &nbsp;{{'delete'|translate}}
+                                </button>
+                                <button pButton pRipple
+                                    *ngIf="(metadata.oucode != 'ALL' && (acl.update == '1' || acl.canUpdate === true) && router.url != '/monitor/job') || (item.status_code == 'C' && (acl.update == '1' || acl.canUpdate === true))"
+                                    type="button" icon="pi pi-pencil" class="p-button-sm merapi-button-edit p-1"
+                                    (click)="showAlert(item)">
+                                    &nbsp;{{'edit'|translate}}
+                                </button>
+                                <button pButton pRipple
+                                    *ngIf="metadata.oucode != 'ALL' && (acl.delete == '1' || acl.canDelete === true) && router.url != '/business/company' && router.url != '/settings/configuration' && router.url != '/monitor/job'"
+                                    type="button" icon="pi pi-trash" class="p-button-sm merapi-button-delete p-1"
+                                    (click)="showAlert(item)">
+                                    &nbsp;{{'delete'|translate}}
+                                </button>
+                            </div>
+                        </ng-container>
+
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td colspan="25" style="text-align: center; padding-top: 10px; padding-bottom: 10px;">
+                        {{'noDataFound'|translate}}
+                    </td>
+                </tr>
+            </ng-template>
+
+        </p-table>
+    </div>
+</p-card>

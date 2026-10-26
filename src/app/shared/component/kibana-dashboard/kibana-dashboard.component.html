@@ -1,0 +1,46 @@
+<div class="kibana-dashboard-container">
+  <div class="flex flex-row gap-3 align-items-center">
+    <h5 class="font-bold" [style]="{'font-size' : '.8rem'}">{{ headerName }}</h5>
+    <p-button
+      [style]="{'height' : '20px', 'width': '20px'}"
+      variant="outlined"
+      icon="pi pi-refresh"
+      [disabled]="isLoading"
+      (click)="refreshDashboard()"
+      pTooltip="Refresh Dashboard"
+      tooltipPosition="bottom">
+    </p-button>
+  </div>
+  <!-- Error State -->
+  <div *ngIf="hasError" class="error-container">
+    <p-message
+      severity="error"
+      [text]="errorMessage"
+      [closable]="false">
+    </p-message>
+    <div class="mt-3 text-center">
+      <p-button
+        label="Retry"
+        icon="pi pi-refresh"
+        (click)="refreshDashboard()">
+      </p-button>
+    </div>
+  </div>
+
+  <!-- Iframe Container -->
+  <div *ngIf="safeUrl && !hasError" class="iframe-container">
+    <iframe
+      [src]="safeUrl"
+      [style.height]="height"
+      width="100%"
+      frameborder="0"
+      scrolling="auto"
+      referrerpolicy="strict-origin-when-cross-origin"
+      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"
+      loading="lazy"
+      (load)="onIframeLoad()"
+      (error)="onIframeError()"
+      class="kibana-iframe">
+    </iframe>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" [baseZIndex]="10000" ></p-confirmDialog>
+<p-toast></p-toast>
+<p-toast position="top-center" key="tc"></p-toast>
+<nav class="sidebar" *ngIf="!isSideCollapse">
+    <header>
+      <div *ngIf="isFetchMenu" style="text-align: center;padding: 30px 0;">
+          <span class="px-3" style="color: white;">Loading&nbsp;&nbsp;<i class="pi pi-spin pi-spinner"></i></span>
+        </div>
+    <a href="/" style="color: white;text-decoration: none;">
+        <img src="assets/images/apps/logobni.png" alt="bnilog" style="width: 125px;height: 48px;"></a> 
+    </header>
+    <div class="scrollbox">
+      <div class="scrollbox-inner">
+        <div *ngIf="isFetchMenu" style="text-align: center;padding: 30px 0;">
+          <span class="px-3" style="color: white;">Loading&nbsp;&nbsp;<i class="pi pi-spin pi-spinner"></i></span>
+        </div>
+        <div *ngIf="!isFetchMenu" class="px-2 py-2">
+          <p-panelMenu [model]="sideMenus" [multiple]="true"></p-panelMenu>
+        </div>
+      </div>
+    </div>
+</nav>
+
+<div class="sbcontain" [ngStyle]="{'left':(isSideCollapse)?'0px':'250px', 'width':(isSideCollapse)?'100%':'calc(100% - 250px)'}">
+<div class="header">
+
+  <p-menubar>
+    <ng-template pTemplate="start">
+      <div class="grid grid-nogutter">
+        <div class="col-12 md:col-6 lg:col-1">
+
+        </div>
+        <div class="col-12 md:col-6 lg:col-11">
+          <h3 class="header-text-only" style="padding-top: 6px;"><span style="color: #046785;">Smart</span><span style="color: #F15820; font-weight: bold;">VA</span> Management</h3>
+        </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="end">
+
+      <p-menu #menu [model]="items" appendTo="body" [popup]="true"></p-menu>
+
+      <a *ngIf="isLogged" href="javascript:void(0)" style="text-decoration: none;">
+        <p-chip (keydown.enter)="{}" class="chip-top-bar" label="{{_userInfo.name_user}}" (click)="menu.toggle($event)" ></p-chip>&nbsp;
+        <p-avatar (keydown.enter)="{}" label="{{avatarUserIcon}}" shape="circle" [style]="{'background-color': '#9c27b0', 'color': '#ffffff' , 'margin-top': '#ffffff','font-size': '1rem'}"  (click)="menu.toggle($event)"></p-avatar>
+      </a>
+      <a *ngIf="!isLogged" href="javascript:void(0)" style="text-decoration: none;">
+        <p-avatar (keydown.enter)="{}" label="G" [style]="{ 'background-color': '#9c27b0', color: '#ffffff' }" (click)="menu.toggle($event)" shape="circle"></p-avatar>
+      </a>
+
+  </ng-template>
+  </p-menubar>
+</div>
+<div class="scrollbox">
+    <div class="scrollbox-inner sbpadding articleContent">
+      <router-outlet></router-outlet>
+    </div>
+</div>
+</div>
+

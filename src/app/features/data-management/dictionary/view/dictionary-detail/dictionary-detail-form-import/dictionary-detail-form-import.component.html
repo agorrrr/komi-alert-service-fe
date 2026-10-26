@@ -1,0 +1,60 @@
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()" *ngIf="formGroup">
+  <div class="grid">
+    <div class="col">
+      <div class="flex flex-column justify-content-start align-items-start">
+        <label class="block text-900 font-medium mb-2">
+          Upload File <span class="text-red-500">*</span>
+        </label>
+        <p-fileupload
+          #fileUpload
+          mode="basic"
+          name="dictionaryFile"
+          [accept]="acceptedFormat"
+          [maxFileSize]="maxFileSize"
+          chooseLabel="Choose File"
+          (onSelect)="onFileSelect($event)"
+          [auto]="false">
+        </p-fileupload>
+        <small class="text-600 block mt-1 small-font">
+          Supported formats: CSV. Maximum file size: 2MB
+        </small>
+        <small
+          class="p-error block"
+          *ngIf="formGroup.get('dictionaryFile')?.invalid && formGroup.get('dictionaryFile')?.touched">
+          File is required for bulk import
+        </small>
+      </div>
+    </div>
+    <div class="col">
+      <label class="block text-900 font-medium mb-2">Example Files</label>
+      <button pButton type="button"
+              [loading]="loading"
+              (click)="onDownloadExample()"
+              class="p-button p-button-sm p-button-secondary">
+        <span class="pi pi-download"></span>
+        <span pButtonLabel>Download Example</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Form Actions -->
+  <div class="flex col-12 justify-content-end gap-2 mt-4">
+    <p-button
+      type="submit"
+      [label]="'btnSave' | translate"
+      icon="pi pi-check"
+      [loading]="loading"
+      [disabled]="formGroup.invalid"
+      styleClass="p-button-primary">
+    </p-button>
+
+    <p-button
+      type="button"
+      label="Cancel"
+      [disabled]="loading"
+      icon="pi pi-times"
+      styleClass="p-button-secondary"
+      (onClick)="onCancel()">
+    </p-button>
+  </div>
+</form>

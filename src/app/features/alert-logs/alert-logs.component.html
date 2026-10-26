@@ -1,0 +1,77 @@
+<div class="p-4">
+  <h2 class="text-2xl font-bold mb-4">Alert Activity Logs</h2>
+  <p class="text-gray-600 mb-4">
+    View detailed logs of all incoming alerts, including payload details, matched rules, and destinations.
+    Auto-refreshes every 10 seconds.
+  </p>
+
+  <app-table-helper-lazy [acl]="permissions" [data]="alertLogs" [objectName]="'Alert Logs'" [fields]="alertLogFields"
+    [loadingData]="isLoadingAlerts" [enableFilter]="true" [hideActionButton]="false"
+    [showUpdate]="false" [showDelete]="false" [totalRecord]="paginationData.totalRecord"
+    (paggingEvent)="onPaging($event)" (viewEvent)="onViewDetail($event)">
+  </app-table-helper-lazy>
+</div>
+
+<!-- Alert Detail Dialog -->
+<p-dialog header="Alert Details" [(visible)]="showDetailDialog" [modal]="true" [style]="{width: '70vw'}"
+  [maximizable]="true">
+  <ng-template pTemplate="content">
+    <div *ngIf="selectedAlert" class="p-4">
+      <!-- Alert Information -->
+      <div class="grid mb-4">
+        <div class="col-6">
+          <h3 class="text-lg font-semibold mb-3">Alert Information</h3>
+          <div class="grid">
+            <div class="col-4 font-semibold">Source:</div>
+            <div class="col-8">{{ selectedAlert.source_name }}</div>
+
+            <div class="col-4 font-semibold">Timestamp:</div>
+            <div class="col-8">{{ selectedAlert.created_at | date: 'dd/MM/yyyy HH:mm:ss' }}</div>
+
+            <div class="col-4 font-semibold">Status:</div>
+            <div class="col-8">
+              <p-tag [value]="selectedAlert.status"
+                [severity]="selectedAlert.status === 'success' ? 'success' :
+                            selectedAlert.status === 'failed' ? 'danger' :
+                            selectedAlert.status === 'partial' ? 'warn' :
+                            selectedAlert.status === 'no_match' ? 'info' : 'secondary'">
+              </p-tag>
+            </div>
+
+            <div class="col-4 font-semibold">Matched Rules:</div>
+            <div class="col-8">{{ selectedAlert.matched_rules }}</div>
+
+            <div class="col-4 font-semibold">Rule Names:</div>
+            <div class="col-8">{{ selectedAlert.rule_names || 'None' }}</div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <h3 class="text-lg font-semibold mb-3">Destinations</h3>
+          <div *ngIf="selectedAlert.destinations_sent && selectedAlert.destinations_sent.length > 0" class="space-y-2">
+            <div *ngFor="let dest of selectedAlert.destinations_sent" class="p-2 border-round surface-border mb-2" style="border: 1px solid var(--surface-border);">
+              <div class="flex justify-content-between align-items-center">
+                <span class="font-semibold">{{ dest.destination }}</span>
+                <p-tag [value]="dest.status"
+                  [severity]="dest.status === 'sent' ? 'success' : 'danger'">
+                </p-tag>
+              </div>
+              <div *ngIf="dest.error" class="text-sm text-red-500 mt-1">
+                {{ dest.error }}
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!selectedAlert.destinations_sent || selectedAlert.destinations_sent.length === 0" class="text-gray-500">
+            No destinations
+          </div>
+        </div>
+      </div>
+
+      <!-- Alert Payload -->
+      <div class="mb-4">
+        <h3 class="text-lg font-semibold mb-3">Alert Payload</h3>
+        <pre class="p-3 bg-gray-100 border-round overflow-auto" style="max-height: 400px;">{{ formatPayload(selectedAlert.payload) }}</pre>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,61 @@
+{
+    "customerNo": 55884412309,
+    "virtualAccountName": "Jeana Kubray",
+    "virtualAccountEmail": "mail@mail.com",
+    "virtualAccountPhone": 81285991320,
+    "startDate": "2024-03-02T19:03:00+0700",
+    "expiredDate": "2024-03-03T19:03:03+0700",
+    "billStartDate": "2024-03-02T19:03:06+0700",
+    "billExpiredDate": "2024-03-03T19:03:03+0700",
+    "company": {
+      "companyCode": "000001",
+      "name": "PT MII",
+      "cifNo": "999888777",
+      "address": "APL Tower Lantai 37\r\nJl. Letjen S. Parman Kav. 28 Jakarta"
+    },
+    "organizationUnit": {
+      "ouCode": "76326823",
+      "name": "MII Kantor Cabang",
+      "cifNo": "8937287302",
+      "adress": "Jl. Buana No.1"
+    },
+    "numbering": {
+      "oid": "123",
+      "name": "Prefix 99",
+      "oidLength": 3,
+      "prefix": "99",
+      "sequenceLength": 11,
+      "template": "99XXXZZZZZZZZZZZ"
+    },
+    "product": {
+      "productCode": "875993",
+      "name": "Product Close Payment",
+      "schemeId": "0F0C35BFCE96D127E0630200580A94CA",
+      "unitName": "MII Kantor Cabang",
+      "companyName": "PT MII",
+      "schemeName": "Scheme Close Payment",
+      "typeName": "Closed Payment",
+      "isBill": "Y"
+    },
+    "billingDetail": [
+      {
+        "billCode": 11,
+        "billNo": 8855442654981321,
+        "billName": "Rama",
+        "billShortName": "Ram",
+        "billDescription": {
+          "english": "Payment",
+          "indonesia": "Bayar"
+        },
+        "billSubCompany": 88402,
+        "billAmount": {
+          "value": 100000,
+          "currency": "IDR"
+        },
+        "additionalInfo": {
+          
+        }
+      }
+    ],
+    "totalAmount": 100000
+  }

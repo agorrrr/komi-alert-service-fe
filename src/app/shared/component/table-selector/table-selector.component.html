@@ -1,0 +1,430 @@
+<div class="bg-white" #tblContainer>
+
+  <p-table
+    #dtTrx
+    [value]="data"
+    [dataKey]="dataKeyParent"
+    [scrollable]="true"
+    [loading]="loadingData"
+    [resizableColumns]="true"
+    [globalFilterFields]="globalFilter"
+    (sortFunction)="customSort($event)"
+    [customSort]="true"
+    [(selection)]="selectedItems"
+    (selectionChange)="onSelectionChange($event)"
+    [selectionMode]="selectionMode">
+
+    <ng-template #caption>
+      <div *ngFor="let btn of extrasButton; let last = last">
+        <button pButton pRipple type="button" [icon]="btn.icon" [class]="btn.style" (click)="btn.action()"
+                [title]="btn.title|translate">{{ btn.label|translate }}
+        </button>
+      </div>
+
+      <div class="flex flex-row align-items-center justify-content-between pt-2 mb-2">
+        <div class="flex flex-row gap-3 align-items-center">
+          <h5 [style]="{'font-size': '0.85rem'}" class="font-bold komi-color">{{ objectName|translate }}</h5>
+
+          <p-multi-select
+            display="comma"
+            appendTo="body"
+            [options]="fields"
+            [(ngModel)]="selectedColumns"
+            optionLabel="header"
+            selectedItemsLabel="{0} fields selected"
+            [style]="{ 'min-width': '100px'}"
+            placeholder="Choose Columns"/>
+
+          <p-button 
+          *ngIf="enableFilter"
+          [style]="{height: '20px', 'width': '20px'}"
+                    [outlined]="true"
+                    (click)="op.toggle($event)"
+                    icon="pi pi-filter"/>
+
+          <p-popover styleClass="col-3" #op>
+            <ng-content select="[slot=filtering]">
+            </ng-content>
+          </p-popover>
+
+          <div *ngFor="let btn of extrasButton1; let last = last"
+               class="flex justify-center items-center">
+            <button pButton pRipple type="button" [icon]="btn.icon" [class]="btn.style"
+                    (click)="btn.action()"
+                    [title]="btn.title|translate">{{ btn.label|translate }}
+            </button>
+          </div>
+        </div>
+
+        <div class="flex flex-row align-items-center gap-2">
+          <!-- Selection Action Buttons -->
+          <div class="p-0 flex flex-row align-items-center justify-content-center gap-3 selection-panel border-round-md" *ngIf="showSelectedDataButton && selectedItems.length > 0">
+            <div class="action-btn">
+              <button pButton pRipple
+                      *ngIf="aclEnhanced?.canUpdate && selectedItems.length == 1"
+                      type="button" icon="pi pi-pencil"
+                      (click)="editData(selectedItems)" title="Edit Data">&nbsp;
+              </button>
+              <button pButton pRipple *ngIf="aclEnhanced?.canDelete"
+                      type="button" icon="pi pi-trash"
+                      (click)="deleteConfirm(selectedItems)" title="Delete Data">&nbsp;
+              </button>
+            </div>
+            <p class="smaller-font">Selected Data ({{ selectedItems.length }})</p>
+          </div>
+
+          <button pButton type="button"
+                  *ngIf="showImportButton"
+                  (click)="onImportData()"
+                  class="p-button p-button-sm ">
+            <span class="pi pi-file-import"></span>
+            <span pButtonLabel>Import Data</span>
+          </button>
+
+          <button pButton type="button"
+                  *ngIf="showExportButton"
+                  (click)="onExportData()"
+                  class="p-button p-button-sm p-button-secondary">
+            <span class="pi pi-download"></span>
+            <span pButtonLabel>Export Data</span>
+          </button>
+
+          <p-iconfield styleClass="content-center" iconPosition="right">
+            <p-inputicon>
+              <i class="pi pi-search"></i>
+            </p-inputicon>
+            <input pInputText type="text" [style]="{height: '20px'}" [(ngModel)]="filterValue"
+                   (input)="dtTrx.filterGlobal(filterValue, 'contains')" placeholder=""/>
+          </p-iconfield>
+
+          <button pButton type="button" *ngIf="aclEnhanced?.canCreate && !hideActionButton"
+                  (click)="addData()" class="p-button p-button-sm">
+            <span class="small-font pi pi-plus"></span>
+            <span pButtonLabel>{{ 'btnAdd'|translate }}</span>
+          </button>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #header>
+      <tr>
+        <!-- Selection Column -->
+        <th *ngIf="selectionMode"
+            class="text-center"
+            alignFrozen="left"
+            pFrozenColumn
+            [frozen]="true"
+            style="width: 3rem">
+          <p-tableHeaderCheckbox *ngIf="selectionMode === 'multiple'"></p-tableHeaderCheckbox>
+        </th>
+
+        <th id="no" class="text-center" alignFrozen="left" pFrozenColumn [frozen]="true">
+          No
+        </th>
+
+        <ng-container *ngFor="let header of _selectedColumns">
+          <th [alignFrozen]="header.alignFrozen" pFrozenColumn
+              [frozen]="header.frozen" [ngStyle]="{ 'text-align': header.align, 'width': header.width }"
+              [pSortableColumn]="header.key">
+            <div class="flex flex-row gap-2 align-items-center font-extrabold text-black-alpha-90">
+              <p-sortIcon [field]="header.key"></p-sortIcon>
+              {{ (header.label ? header.label : header.key) }}
+              <p-columnFilter *ngIf="header.filter == 'filterText'" type="text" [field]="header.key"
+                              display="menu"/>
+              <p-columnFilter *ngIf="header.filter == 'filterSelect'" [field]="header.key"
+                              matchMode="equals" display="menu">
+                <ng-template #filter let-value let-filter="filterCallback">
+                  <p-select [options]="header.options"
+                            (onChange)="filter($event.value)" placeholder="Select One" styleClass="w-full">
+                    <ng-template let-option #item>
+                      <p-tag [value]="option.value" [severity]="option.severity"></p-tag>
+                    </ng-template>
+                  </p-select>
+                </ng-template>
+              </p-columnFilter>
+            </div>
+          </th>
+        </ng-container>
+
+<!--        <th style="width: 5%" class="text-center font-extrabold" alignFrozen="right" pFrozenColumn [frozen]="true"-->
+<!--            *ngIf="(aclEnhanced?.canView || aclEnhanced?.canUpdate || aclEnhanced?.canDelete) && !hideActionButton">-->
+<!--          {{ 'Action'|translate }}-->
+<!--        </th>-->
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-item let-rowIndex="rowIndex" let-expanded="expanded">
+      <tr>
+        <!-- Selection Column -->
+        <td *ngIf="selectionMode" alignFrozen="left" pFrozenColumn [frozen]="true" class="text-center w-[.1%]">
+          <p-tableCheckbox [value]="item" *ngIf="selectionMode === 'multiple'"></p-tableCheckbox>
+          <p-tableRadioButton [value]="item" *ngIf="selectionMode === 'single'"></p-tableRadioButton>
+        </td>
+
+        <td alignFrozen="left" pFrozenColumn [frozen]="true" class="text-center w-[.1%]">
+          {{ ((page - 1) * rows) + rowIndex + 1 }}
+          <p-button *ngIf="expandable && item.children_menu != null && item.children_menu != 0"
+                    type="button" pRipple [pRowToggler]="item" [text]="true" [rounded]="true" [plain]="true"
+                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"/>
+        </td>
+
+        <ng-container *ngFor="let column of _selectedColumns; let last = last">
+          <td [alignFrozen]="column.alignFrozen" pFrozenColumn [frozen]="column.frozen"
+              [ngStyle]="{ 'text-align': column.align, 'width': column.width }">
+
+            <div *ngIf="column.type == 'barLevel'">
+              <div class="score-container">
+                <div class="score-bar">
+                  <div class="score-fill"
+                       [style.width.%]="item[column.key]"
+                       [style.background]="getScoreGradient(item[column.key])"></div>
+                </div>
+                <div class="score-value">{{ item[column.key] }}</div>
+              </div>
+            </div>
+
+            <div *ngIf="column.type == 'investigationStatus'">
+              <p-select
+                [(ngModel)]="item[column.key]"
+                [options]="investigationStatusOptions"
+                optionLabel="label"
+                optionValue="value"
+                (ngModelChange)="onChangeStatus($event, item)"
+                appendTo="body"
+                [style]="{'width': '140px'}"
+              >
+              </p-select>
+            </div>
+
+            <div *ngIf="column.type == 'customerStatus'">
+              <p-select
+                [(ngModel)]="item[column.key]"
+                [options]="customerStatusOptions"
+                optionLabel="label"
+                optionValue="value"
+                (ngModelChange)="onChangeStatus($event, item)"
+                appendTo="body"
+                [style]="{'width': '140px'}"
+              >
+              </p-select>
+            </div>
+
+            <div *ngIf="column.type == 'text'">
+              <label [innerHTML]="highlightSearch(item[column.key], filterValue)" class="text-sm"
+                     [for]="toDisplayString(item[column.key])">{{
+                  toDisplayString(item[column.key])
+                }}</label>
+            </div>
+
+            <div *ngIf="column.type == 'number'">
+              <label class="text-sm" [for]="item[column.key]">{{
+                  item[column.key] == null ? 0 :
+                    item[column.key]
+                }}</label>
+            </div>
+
+            <div *ngIf="column.type == 'date'">
+              <label class="text-sm" [for]="item[column.key]">{{
+                  item[column.key] | date: 'dd/MM/yyyy HH:mm'
+                }}</label>
+            </div>
+
+            <div *ngIf="column.type == 'currency'">
+              <label class="text-sm" [for]="item[column.key]">{{
+                  item[column.key] | currency:
+                    (item[column.currency] ?
+                      item[column.currency] : 'IDR '):'symbol':'1.2-2'
+                }}</label>
+            </div>
+
+            <div *ngIf="column.type == 'level'">
+              <p-tag *ngIf="item[column.key] == 0" severity="info" value="Administrator"
+                     [style]="{'width':'70px'}"></p-tag>
+              <p-tag *ngIf="item[column.key] == 1" severity="secondary" value="Regular"
+                     [style]="{'width':'70px'}"></p-tag>
+              <p-tag *ngIf="item[column.key] > 1" severity="contrast" value="Guest"
+                     [style]="{'width':'70px'}"></p-tag>
+            </div>
+
+            <div *ngIf="column.type == 'tag'" class=" p-0 m-0">
+              <p-tag *ngIf="item[column.key] == 'NEW'" severity="info" value="New"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'ACTIVE'" severity="success" value="Active"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'COMPLETED'" severity="success" value="Completed"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'Active'" severity="success" value="Active"
+                     [style]="{'width':'70'}"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'Inactive'" severity="danger" value="Inactive"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'FLAGGED'" severity="warn" value="Flagged"
+                     [style]="{'width':'70'}"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'INVESTIGATING'" severity="warn" value="Investigating"
+                     [style]="{'width':'70'}"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'CLOSED'" severity="success" value="Closed"
+                     [style]="{'width':'70'}"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'RESOLVED'" severity="success" value="Resolved"
+                     [style]="{'width':'70'}"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'ENABLED'" severity="success" value="Enabled"
+                     [style]="{'width':'70'}"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'DISABLED'" severity="danger" value="Disabled"
+                     [style]="{'width':'70'}"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'ALLOW'" severity="success" value="Allow"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'BLOCKED'" severity="danger" value="Blocked"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'Close' || item[column.key] == 'Closed'"
+                     severity="danger" value="Close"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'Y'" severity="success" value="Active"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'N'" severity="danger" value="Inactive"></p-tag>
+
+              <p-tag *ngIf="item[column.key] == 'N'" severity="info" value="New"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'A'" severity="success" value="Active"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'E'" severity="info" value="Expired"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'B'" severity="danger" value="Block"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'C'" severity="danger" value="Close"></p-tag>
+
+              <p-tag *ngIf="item[column.key] == 'SUCCESS'" severity="success" value="SUCCESS"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'COMPLETE'" severity="success" value="COMPLETE"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'FAILED'" severity="danger" value="FAILED"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'ON PROGRESS'" severity="info"
+                     value="ON PROGRESS"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'INPROGRESS'" severity="info"
+                     value="INPROGRESS"></p-tag>
+
+              <p-tag *ngIf="item[column.key] == 'Incoming'" severity="secondary"
+                     value="Incoming"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'Outgoing'" severity="contrast"
+                     value="Outgoing"></p-tag>
+
+              <p-tag *ngIf="item[column.key] == 'Yes'" severity="secondary" value="Yes"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'No'" severity="contrast" value="No"></p-tag>
+
+              <p-tag *ngIf="item[column.key] == 'Enabled'" severity="success" value="Enabled"
+                     [style]="{'width':'70'}"></p-tag>
+              <p-tag *ngIf="item[column.key] == 'Disabled'" severity="danger" value="Disabled"></p-tag>
+
+              <p-tag *ngIf="item[column.key] == '0'" severity="danger"
+                     value="Pending Verification"></p-tag>
+              <p-tag *ngIf="item[column.key] == '1'" severity="success" value="Active"></p-tag>
+              <p-tag *ngIf="item[column.key] == '2'" severity="danger" value="Block"></p-tag>
+              <p-tag *ngIf="item[column.key] == '3'" severity="danger" value="Reset Password"></p-tag>
+            </div>
+          </td>
+        </ng-container>
+
+<!--        <td [style]="{'text-align': 'center'}"-->
+<!--            class="w-[1%]"-->
+<!--            *ngIf="(aclEnhanced?.canView || aclEnhanced?.canUpdate || aclEnhanced?.canDelete) &&  !hideActionButton">-->
+<!--          <div class="action-btn">-->
+<!--            <ng-container *ngFor="let btn of extrasActionButton; let last = last">-->
+<!--              <button pButton pRipple type="button" [icon]="btn.icon" [class]="btn.style"-->
+<!--                      (click)="btn.action(item)"-->
+<!--                      [ngClass]="{'hidden' : item.children_menu && item.children_menu == 0}"-->
+<!--                      [title]="btn.title|translate">{{ btn.label|translate }}-->
+<!--              </button>-->
+<!--            </ng-container>-->
+<!--            <button pButton pRipple *ngIf="aclEnhanced?.canView && canView" type="button" icon="pi pi-eye"-->
+<!--                    (click)="viewData(item)"-->
+<!--                    title="View Data">&nbsp;-->
+<!--            </button>-->
+<!--          </div>-->
+<!--        </td>-->
+      </tr>
+    </ng-template>
+
+    <ng-template #expandedrow let-item>
+      <tr>
+        <td [attr.colspan]="selectionMode ? _selectedColumns.length + 3 : _selectedColumns.length + 2">
+          <div class="p-1">
+            <p-table [value]="item.menus" [dataKey]="dataKeyChild" class="p-datatable-sm">
+              <ng-template #header>
+                <tr>
+                  <th id="id" style="text-align: center;">Id</th>
+                  <th id="menu" style="text-align: center;">Menu</th>
+                  <th id="desc" style="text-align: center;">Description</th>
+                  <th id="link" style="text-align: center;">Link</th>
+                  <th id="action" style="text-align: center;">Action</th>
+                </tr>
+              </ng-template>
+              <ng-template #body let-menu>
+                <tr>
+                  <td>{{ menu.id_menu }}</td>
+                  <td>{{ menu.name_menu }}</td>
+                  <td>{{ menu.desc_menu }}</td>
+                  <td>{{ menu.link_menu }}</td>
+                  <td style="text-align: center;">
+                    <ng-container *ngFor="let btn of extrasActionButtonChild">
+                      <button pButton pRipple type="button" [icon]="btn.icon" [class]="btn.style"
+                              (click)="btn.action(item, menu)"
+                              [title]="btn.title|translate">{{ btn.label|translate }}
+                      </button>
+                    </ng-container>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template #emptymessage>
+                <tr>
+                  <td colspan="6">There are no order for this product yet.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #emptymessage>
+      <tr>
+        <td [attr.colspan]="selectionMode ? _selectedColumns?.length + 3 : _selectedColumns?.length + 2"
+            style="text-align: center;padding-top: 10px;padding-bottom: 10px;">
+          {{ 'noDataFound'|translate }}
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #loadingbody let-columns="columns">
+      <tr style="height:46px">
+        <td *ngFor="let col of columns; let even = even">
+          <p-skeleton [ngStyle]="{'width': '60%'}"/>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <div *ngIf="data?.length > 0" class="w-full px-5 pt-1 grid place-items-center">
+    <div class="col-12 flex flex-row justify-content-between">
+      <div class="flex flex-row">
+        <div class="col-4 flex align-items-center justify-content-start">
+          <p style="font-size: .6rem!important;">{{ 'pageRecord'|translate }}</p>
+        </div>
+        <div class="col-8">
+          <p-selectButton [style]="{'font-size': '0.5rem'}" [options]="rowtable" optionLabel="label"
+                          [(ngModel)]="rowsPerPage" (onChange)="changeRowsPerPage($event)"
+                          optionValue="value"></p-selectButton>
+        </div>
+      </div>
+      <div class="col flex justify-end m-0 p-0">
+        <p-paginator (onPageChange)="paggingData($event)" [first]="first"
+                     [rows]="rows" [totalRecords]="totalRecord" [rowsPerPageOptions]="[10, 25, 50, 100]"
+                     [showCurrentPageReport]="true"
+                     currentPageReportTemplate="{first} {{'to'|translate}} {last} {{'of'|translate}} {totalRecords} {{'entries'|translate}}"
+                     class="my-custom-datatable"
+        >
+        </p-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  [header]="'changeStatus' | translate"
+  [maximizable]="true"
+  [modal]="true"
+  [maximizeIcon]="null"
+  [(visible)]="modalVisibility"
+  [style]="{width: '25vw'}">
+  <ng-template pTemplate="content">
+    <div class="pl-3 flex flex-row align-items-start gap-3">
+      <label class="smaller-font">Remark</label>
+      <textarea [(ngModel)]="statusRemark" class="smaller-font" pTextarea [rows]="2"></textarea>
+    </div>
+    <div class="flex justify-content-end mt-3">
+      <button type="button" class="p-button p-button-sm" (click)="onSubmitStatus()">Save</button>
+    </div>
+  </ng-template>
+</p-dialog>

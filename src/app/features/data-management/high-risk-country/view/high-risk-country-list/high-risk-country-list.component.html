@@ -1,0 +1,22 @@
+<div *ngIf="appState.getCurrentACL?.canRead" class="flex flex-column gap-4">
+  <app-table-helper-lazy
+    [data]="countries"
+    [objectName]="headerName"
+    [totalRecord]="paginationData.totalRecord || 0"
+    [fields]="fields"
+    [loadingData]="isLoading"
+    (viewEvent)="onView($event)"
+    (paggingEvent)="onFilter($event)">
+  </app-table-helper-lazy>
+</div>
+
+<p-dialog
+  header="{{headerName}}"
+  [maximizable]="true"
+  [(visible)]="modalVisibility"
+  [modal]="true"
+  [style]="{width: '50vw'}">
+  <ng-template pTemplate="content">
+    <app-view-data-formatted [data]="selectedData"></app-view-data-formatted>
+  </ng-template>
+</p-dialog>

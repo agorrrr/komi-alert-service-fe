@@ -1,0 +1,57 @@
+<p-table #dtRpt [value]="reportData" [scrollable]="true" scrollHeight="400px" [paginator]="true" [rows]="10"
+    [showCurrentPageReport]="true" styleClass="p-datatable-striped"
+    [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"scrollDirection="both"
+    [globalFilterFields]="['issuedDate', 'reportName', 'fileFormat','issuedBy', 'status']"
+    [rowsPerPageOptions]="[10, 25, 50,100]" class="p-2 rpt-table">
+    <ng-template pTemplate="caption">
+
+        <div class="flex px-2 py-2">
+            <h3 style="margin: 0; padding: 0;">Reports Status</h3>
+            <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dtRpt.filterGlobal($any($event.target).value, 'contains')"
+                    placeholder="Search..." />&nbsp;
+
+            </span>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="issuedDate" id="issuedDate">
+                Issued Date
+                <p-sortIcon field="issuedDate"></p-sortIcon>
+            </th>
+            <th pSortableColumn="reportName" id="reportName">
+                Report Name
+                <p-sortIcon field="reportName"></p-sortIcon>
+            </th>
+            <th pSortableColumn="fileFormat" id="fileFormat">
+                File Format
+                <p-sortIcon field="fileFormat"></p-sortIcon>
+            </th>
+            <th pSortableColumn="issuedBy" id="issuedBy">
+                Issued By
+                <p-sortIcon field="issuedBy"></p-sortIcon>
+            </th>
+            <th pSortableColumn="status" id="status">
+                Status
+                <p-sortIcon field="status"></p-sortIcon>
+            </th>
+            <th id="action">Actions</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+        <tr [pSelectableRow]="item">
+            <td>{{item.issuedDate}}</td>
+            <td>{{item.reportName}}</td>
+            <td>{{item.fileFormat}}</td>
+            <td>{{item.issuedBy}}</td>
+            <td>{{item.status}}</td>
+            <td>
+                <button pButton pRipple type="button" icon="pi pi-download"
+                    class="p-button-sm merapi-button p-1" (click)="onActionClick(item)"></button>
+            </td>
+        </tr>
+    </ng-template>
+
+</p-table>

@@ -1,0 +1,60 @@
+<form class="px-3 py-4" [formGroup]="formGroup" (ngSubmit)="onFormSubmit()">
+    <ng-container *ngFor="let field of formFields">
+        <div *ngIf="field.type === 'SELECT'" class="grid">
+            <label id="{{field.id}}" [for]="field.id" class="col-4">{{field.label}}</label>
+            <div class="col-6">
+
+                <p-select *ngIf="field.customLabel" ariaLabelledBy="{{field.id}}" [options]="field.selectOptions"
+                    appendTo="body" formControlName="{{field.id}}" optionLabel="{{field.selectLabel}}"
+                    placeholder="Select - {{field.label}}">
+                    <ng-template pTemplate="selectedItem">
+                        <div class="p-1 w-6">
+                            <div>{{formGroup.get(field.id)?.value.code}} - {{formGroup.get(field.id)?.value.name}}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-role pTemplate="item">
+                        <div class="p-1">
+                            <div>{{role.code }} - {{ role.name }}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+
+
+            </div>
+        </div>
+        <div *ngIf="field.type === 'INPUTTEXT'" class="grid align-items-center ">
+            <label for="{{field.id}}" id="{{field.id}}" class="col-4">{{field.label}}</label>
+            <div class="col-6">
+                <input pInputText class="p-1 w-12" formControlName="{{field.id}}" />
+            </div>
+        </div>
+        <div *ngIf="field.type === 'datepicker'" class="grid align-items-center ">
+            <label for="{{field.id}}" id="{{field.id}}" class="col-4">{{field.label}}</label>
+            <div class="col-6">
+                <ng-container *ngIf="field.range; else singleDate">
+                    <div class="flex flex-row pr-2">
+                        <div class="col-6 p-0 mr-2">
+                            <p-datepicker ariaLabelledBy="{{field.id}}" formControlName="{{field.id}}Start"
+                                appendTo="body"></p-datepicker>
+                        </div>
+                        <div class="col-6 p-0">
+                            <p-datepicker ariaLabelledBy="{{field.id}}" formControlName="{{field.id}}End"
+                                appendTo="body"></p-datepicker>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-template #singleDate>
+                    <p-datepicker ariaLabelledBy="{{field.id}}" formControlName="{{field.id}}"
+                        appendTo="body"></p-datepicker>
+                </ng-template>
+            </div>
+            <div *ngIf="formGroup.get(field.id + 'End')?.hasError('dateRangeError')" class="text-red-600 col-12">
+                End date cannot be smaller than start date.
+            </div>
+        </div>
+        
+    </ng-container>
+    <div class="flex flex-row-reverse gap-4 align-items-center ">
+        <button pButton pRipple label="{{'btnSubmit'|translate}}" type="submit" class="p-button px-1 merapi-button"></button>
+    </div>
+</form>

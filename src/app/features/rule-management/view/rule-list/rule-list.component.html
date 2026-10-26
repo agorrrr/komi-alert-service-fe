@@ -1,0 +1,30 @@
+<div class="flex flex-column gap-3">
+  
+  <app-table-helper-lazy [acl]="permissions"
+                         [data]="rules"
+                         [totalRecord]="paginationData.totalRecord"
+                         [objectName]="headerName"
+    
+                         [fields]="fields"
+                         [loadingData]="isLoading"
+                         [enableFilter]="false"
+                         (addEvent)="onAdd()"
+                         (updateEvent)="onUpdate($event)"
+                         (viewEvent)="onView($event)"
+                         (deleteEvent)="onDelete($event)"
+                         (paggingEvent)="onPaging($event)">
+  </app-table-helper-lazy>
+</div>
+
+<p-dialog [header]="isCreation ? 'Create Rule' : (isView ? 'View Rule' : 'Edit Rule')"
+          [(visible)]="modalVisibility"
+          [modal]="true"
+          [style]="{ width: '50vw' }"
+          [draggable]="false"
+          [resizable]="false"
+          (onHide)="onSuccess()">
+  <app-rule-form *ngIf="modalVisibility" 
+                 (successEvent)="onSuccess()" 
+                 (cancelEvent)="modalVisibility = false">
+  </app-rule-form>
+</p-dialog>

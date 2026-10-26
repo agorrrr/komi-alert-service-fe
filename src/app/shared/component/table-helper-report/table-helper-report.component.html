@@ -1,0 +1,185 @@
+<p-card>
+  <div style="padding: 10px 10px 20px 10px;">
+    <p-table #dtTrx
+             [value]="data"
+             styleClass="p-datatable-striped p-datatable-sm "
+             [scrollable]="true"
+             [resizableColumns]="true"
+             [loading]="loading"
+             [globalFilterFields]="globalFilter"
+             class="my-custom-datatable"
+    >
+      <ng-template #caption>
+        <div class="flex flex-row align-items-center justify-content-between pt-2 mb-2">
+          <div class="flex flex-row gap-3 align-items-center">
+            <h5 [style]="{'font-size': '0.85rem'}" class="font-bold komi-color">{{ objectName|translate }}</h5>
+            <p-multi-select
+              display="comma"
+              appendTo="body"
+              [options]="fields"
+              [(ngModel)]="selectedColumns" optionLabel="header"
+              selectedItemsLabel="{0} fields selected"
+              [style]="{ 'min-width': '100px'}"
+              placeholder="Choose Columns"/>
+            <p-button [style]="{height: '20px', 'width': '20px'}"
+                      [outlined]="true"
+                      (click)="op.toggle($event)"
+                      icon="pi pi-filter"/>
+            <p-popover styleClass="col-5" #op>
+              <ng-content select="[slot=filtering]">
+
+              </ng-content>
+            </p-popover>
+
+          </div>
+          <div class="flex flex-row align-items-center gap-2">
+            <p-iconfield styleClass="content-center" iconPosition="right">
+              <p-inputicon>
+                <i class="pi pi-search"></i>
+              </p-inputicon>
+              <input pInputText type="text" [style]="{height: '20px'}" [(ngModel)]="filterValue"
+                     (input)="dtTrx.filterGlobal(filterValue, 'contains')" placeholder=""/>
+            </p-iconfield>
+            <button pButton type="button" (click)="refresh({})" class="p-button p-button-sm">
+              <span class="smaller-font pi pi-refresh"></span>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th id="no" style="text-align: center; width:5%">
+            No
+          </th>
+          <ng-container *ngFor="let header of fields">
+            <th [ngStyle]="{ 'text-align': header.align, 'width': header.width }" [pSortableColumn]="header.key">
+              <p-sortIcon [field]="header.key"></p-sortIcon>
+              {{ header.key |translate }}
+            </th>
+          </ng-container>
+          <th alignFrozen="right"
+              pFrozenColumn
+              [frozen]="true"
+              style="text-align: center; width:12%"
+              *ngIf="acl.create == '1'">
+            {{ 'Action'|translate }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+        <tr>
+          <td style="text-align: center; width:5%">
+            {{ ((page - 1) * rows) + rowIndex + 1 }}
+          </td>
+          <ng-container *ngFor="let column of fields; let last = last">
+            <td [ngStyle]="{ 'text-align': column.align, 'width': column.width }">
+              <div *ngIf="column.type == 'text'">
+                <label [for]="item[column.key]">{{ item[column.key] }}</label>
+              </div>
+              <div *ngIf="column.type == 'date'">
+                <label [for]="item[column.key]">{{ item[column.key] | date}}</label>
+              </div>
+              <div *ngIf="column.type == 'tag'">
+                <p-tag *ngIf="item[column.key] == 'Active'"
+                       severity="success"
+                       value="Active"
+                       [style]="{'width':'90px'}"></p-tag>
+                <p-tag *ngIf="item[column.key] == 'Inactive'"
+                       severity="danger"
+                       value="Inactive"
+                       [style]="{'width':'90px'}"></p-tag>
+
+                <p-tag *ngIf="item[column.key] == 'Y'"
+                       severity="success"
+                       value="Active"
+                       [style]="{'width':'90px'}"></p-tag>
+                <p-tag *ngIf="item[column.key] == 'N'"
+                       severity="danger"
+                       value="Inactive"
+                       [style]="{'width':'90px'}"></p-tag>
+
+                <p-tag *ngIf="item[column.key] == 'N'" severity="info" value="New"></p-tag>
+                <p-tag *ngIf="item[column.key] == 'A'" severity="success" value="Active"></p-tag>
+                <p-tag *ngIf="item[column.key] == 'B'" severity="danger" value="Block"></p-tag>
+                <p-tag *ngIf="item[column.key] == 'C'" severity="danger" value="Closed"></p-tag>
+
+
+                <p-tag *ngIf="item[column.key] == '0'" severity="danger" value="Pending Verification"></p-tag>
+                <p-tag *ngIf="item[column.key] == '1'" severity="success" value="Active"></p-tag>
+                <p-tag *ngIf="item[column.key] == '2'" severity="danger" value="Block"></p-tag>
+                <p-tag *ngIf="item[column.key] == '3'" severity="danger" value="Reset Password"></p-tag>
+
+                <p-tag *ngIf="item[column.key] == 'ERROR'" severity="danger" value="Error"></p-tag>
+                <p-tag *ngIf="item[column.key] == 'ONPROGRESS'" severity="secondary" value="In Progress"></p-tag>
+                <p-tag *ngIf="item[column.key] == 'NEW'" severity="info" value="New"></p-tag>
+                <p-tag *ngIf="item[column.key] == 'COMPLETE'" severity="success" value="Complete"></p-tag>
+
+                <p-tag *ngIf="item[column.key] == 'UPLOADED'" severity="success" value="Uploaded"></p-tag>
+                <p-tag *ngIf="item[column.key] == 'SUBMIT'" severity="success" value="Submit"></p-tag>
+
+
+              </div>
+            </td>
+
+          </ng-container>
+          <td alignFrozen="right" pFrozenColumn [frozen]="true" style="text-align: center;" *ngIf="acl.create == '1'">
+            <button *ngIf="acl.create == '1' && item.status =='COMPLETE'"
+                    pButton
+                    pRipple
+                    type="button"
+                    icon="pi pi-download"
+                    class="p-button-sm p-button-success p-1 bg-cyan-500"
+                    (click)="downloadFile(item)"></button>
+            <button
+              pButton
+              type="button"
+              *ngIf="acl.create == '1' && router.url == '/bulk/create-va' && item.status == uploadState.RECEIVED "
+              label="{{ 'btnSubmit' | translate }}  {{ objectName }}"
+              (click)="viewData(item)"
+              class="p-button p-button-md btn-header-tbl"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="8"
+              style="text-align: center;padding-top: 10px;padding-bottom: 10px;">{{ 'noDataFound'|translate }}.
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <div class="w-full py-3" style="display: grid; place-items: center;">
+      <div class="grid w-full p-fluid">
+        <div class="col-3">
+          <div class="grid py-1">
+            <div class="col-5 flex align-items-center justify-content-start">
+              <p style="font-size: 13.43px;font-weight: 400;">{{ 'pageRecord'|translate }}</p></div>
+            <div class="col-7 my-custom-datatable">
+              <p-selectButton [options]="rowtable"
+                              optionLabel="label"
+                              [(ngModel)]="rowsPerPage"
+                              (onChange)="changeRowsPerPage($event)"
+                              optionValue="value"></p-selectButton>
+            </div>
+          </div>
+        </div>
+        <div class="col-9" style="display: flex; justify-content: flex-end; margin:0;padding: 0;">
+          <p-paginator
+            [style]="{'margin-bottom':'4.5rem'}"
+            (onPageChange)="paggingData($event)"
+            [first]="first"
+            [rows]="rows"
+            [totalRecords]="totalRecord"
+            [rowsPerPageOptions]="[10, 25, 50, 100]"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="{first} {{'to'|translate}} {last} {{'of'|translate}} {totalRecords} {{'entries'|translate}}"
+            class="my-custom-datatable"></p-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</p-card>

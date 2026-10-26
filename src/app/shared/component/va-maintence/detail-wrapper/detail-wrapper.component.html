@@ -1,0 +1,10 @@
+<div class="flex flex-row gap-8 align-items-start mt-4 p-4">
+    <h4 class="w-4">{{ title }}</h4>
+    <div class="w-8">
+        <p-panel [header]="panelHeader" class="panel-bg" [toggleable]="true">
+            <ng-container *ngFor="let item of detailContent">
+                <app-detail-content-wrapper [data]="item"></app-detail-content-wrapper>
+            </ng-container>
+        </p-panel>
+    </div>
+</div>

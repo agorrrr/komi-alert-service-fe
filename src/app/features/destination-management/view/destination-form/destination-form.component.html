@@ -1,0 +1,200 @@
+<form *ngIf="formGroup" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <div class="flex flex-column gap-3">
+    <!-- Name -->
+    <div class="field">
+      <label for="name" class="block text-900 font-medium mb-2">
+        Name <span class="text-red-500">*</span>
+      </label>
+      <input id="name" class="w-full" type="text" pInputText formControlName="name" placeholder="Enter destination name"
+        [readOnly]="formGroup.disabled" [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('name')}">
+      <small *ngIf="isFieldInvalid('name')" class="p-error">
+        Name is required
+      </small>
+    </div>
+
+    <!-- Type -->
+    <div class="field">
+      <label for="type" class="block text-900 font-medium mb-2">
+        Type <span class="text-red-500">*</span>
+      </label>
+      <p-dropdown id="type" class="w-full" formControlName="type" [options]="state.destinationTypes" optionLabel="label"
+        optionValue="value" placeholder="Select type" styleClass="w-full" [readonly]="formGroup.disabled"
+        [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('type')}">
+      </p-dropdown>
+      <small *ngIf="isFieldInvalid('type')" class="p-error">
+        Type is required
+      </small>
+    </div>
+
+    <!-- Add spacing when no type selected -->
+    <div *ngIf="!selectedType" class="field" style="min-height: 100px;">
+      <p class="text-500 text-center">Please select a type to configure destination settings</p>
+    </div>
+
+    <!-- Telegram Configuration -->
+    <ng-container *ngIf="selectedType === 'telegram'">
+      <!-- Chat ID -->
+      <div class="field">
+        <label for="chat_id" class="block text-900 font-medium mb-2">
+          Chat ID <span class="text-red-500">*</span>
+        </label>
+        <input id="chat_id" class="w-full" type="text" pInputText formControlName="chat_id"
+          placeholder="Enter chat ID (e.g., -1001234567890)" [readOnly]="formGroup.disabled"
+          [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('chat_id')}">
+        <small *ngIf="isFieldInvalid('chat_id')" class="p-error">
+          Chat ID is required
+        </small>
+      </div>
+
+      <!-- Thread ID -->
+      <div class="field">
+        <label for="thread_id" class="block text-900 font-medium mb-2">
+          Thread ID <span class="text-500">(Optional)</span>
+        </label>
+        <input id="thread_id" class="w-full" type="text" pInputText formControlName="thread_id"
+          placeholder="Enter thread ID for topic-based groups" [readOnly]="formGroup.disabled">
+      </div>
+
+      <!-- Bot Token -->
+      <div class="field">
+        <label for="bot_token" class="block text-900 font-medium mb-2">
+          Bot Token <span class="text-500">(Optional)</span>
+        </label>
+        <p-password id="bot_token" class="w-full" formControlName="bot_token"
+          placeholder="Enter bot token (leave blank to use default)" [toggleMask]="true" [feedback]="false"
+          styleClass="w-full" [disabled]="formGroup.disabled" inputStyleClass="w-full">
+        </p-password>
+      </div>
+    </ng-container>
+
+    <!-- Slack Configuration -->
+    <ng-container *ngIf="selectedType === 'slack'">
+      <!-- Webhook URL -->
+      <div class="field">
+        <label for="webhook_url" class="block text-900 font-medium mb-2">
+          Webhook URL <span class="text-red-500">*</span>
+        </label>
+        <input id="webhook_url" class="w-full" type="text" pInputText formControlName="webhook_url"
+          placeholder="Enter Slack webhook URL" [readOnly]="formGroup.disabled"
+          [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('webhook_url')}">
+        <small *ngIf="isFieldInvalid('webhook_url')" class="p-error">
+          Webhook URL is required
+        </small>
+      </div>
+
+      <!-- Channel Name -->
+      <div class="field">
+        <label for="channel_name" class="block text-900 font-medium mb-2">
+          Channel Name <span class="text-500">(Optional)</span>
+        </label>
+        <input id="channel_name" class="w-full" type="text" pInputText formControlName="channel_name"
+          placeholder="Enter channel name (e.g., #alerts)" [readOnly]="formGroup.disabled">
+      </div>
+
+      <!-- Slack Token -->
+      <div class="field">
+        <label for="slack_token" class="block text-900 font-medium mb-2">
+          Slack Token <span class="text-500">(Optional)</span>
+        </label>
+        <p-password id="slack_token" class="w-full" formControlName="slack_token"
+          placeholder="Enter Slack bot token (if using bot)" [toggleMask]="true" [feedback]="false" styleClass="w-full"
+          [disabled]="formGroup.disabled" inputStyleClass="w-full">
+        </p-password>
+      </div>
+    </ng-container>
+
+    <!-- Email Configuration -->
+    <ng-container *ngIf="selectedType === 'email'">
+      <!-- Recipient Emails -->
+      <div class="field">
+        <label for="recipient_emails" class="block text-900 font-medium mb-2">
+          Recipient Email(s) <span class="text-red-500">*</span>
+        </label>
+        <input id="recipient_emails" class="w-full" type="text" pInputText formControlName="recipient_emails"
+          placeholder="Enter email addresses (comma-separated)" [readOnly]="formGroup.disabled"
+          [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('recipient_emails')}">
+        <small *ngIf="isFieldInvalid('recipient_emails')" class="p-error">
+          Recipient email(s) are required
+        </small>
+      </div>
+
+      <!-- Subject Template -->
+      <div class="field">
+        <label for="subject_template" class="block text-900 font-medium mb-2">
+          Subject Template <span class="text-500">(Optional)</span>
+        </label>
+        <input id="subject_template" class="w-full" type="text" pInputText formControlName="subject_template"
+          placeholder="Enter email subject template" [readOnly]="formGroup.disabled">
+      </div>
+    </ng-container>
+
+    <!-- Webhook Configuration -->
+    <ng-container *ngIf="selectedType === 'webhook'">
+      <!-- URL -->
+      <div class="field">
+        <label for="url" class="block text-900 font-medium mb-2">
+          Webhook URL <span class="text-red-500">*</span>
+        </label>
+        <input id="url" class="w-full" type="text" pInputText formControlName="url" placeholder="Enter webhook URL"
+          [readOnly]="formGroup.disabled" [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('url')}">
+        <small *ngIf="isFieldInvalid('url')" class="p-error">
+          Webhook URL is required
+        </small>
+      </div>
+
+      <!-- HTTP Method -->
+      <div class="field">
+        <label for="http_method" class="block text-900 font-medium mb-2">
+          HTTP Method <span class="text-red-500">*</span>
+        </label>
+        <p-dropdown id="http_method" class="w-full" formControlName="http_method"
+          [options]="[{label: 'POST', value: 'POST'}, {label: 'PUT', value: 'PUT'}]" optionLabel="label"
+          optionValue="value" placeholder="Select HTTP method" styleClass="w-full" [readonly]="formGroup.disabled">
+        </p-dropdown>
+      </div>
+
+      <!-- Headers -->
+      <div class="field">
+        <label for="headers" class="block text-900 font-medium mb-2">
+          Headers <span class="text-500">(Optional, JSON format)</span>
+        </label>
+        <textarea id="headers" class="w-full" pInputTextarea formControlName="headers"
+          placeholder='{"Content-Type": "application/json"}' [readOnly]="formGroup.disabled" rows="3">
+        </textarea>
+      </div>
+
+      <!-- Auth Type -->
+      <div class="field">
+        <label for="auth_type" class="block text-900 font-medium mb-2">
+          Authentication Type <span class="text-500">(Optional)</span>
+        </label>
+        <p-dropdown id="auth_type" class="w-full" formControlName="auth_type"
+          [options]="[{label: 'None', value: null}, {label: 'Bearer Token', value: 'bearer'}, {label: 'API Key', value: 'apikey'}]"
+          optionLabel="label" optionValue="value" placeholder="Select authentication type" styleClass="w-full"
+          [readonly]="formGroup.disabled">
+        </p-dropdown>
+      </div>
+
+      <!-- Auth Token -->
+      <div class="field" *ngIf="formGroup.get('auth_type')?.value">
+        <label for="auth_token" class="block text-900 font-medium mb-2">
+          Authentication Token
+        </label>
+        <p-password id="auth_token" class="w-full" formControlName="auth_token" placeholder="Enter authentication token"
+          [toggleMask]="true" [feedback]="false" styleClass="w-full" [disabled]="formGroup.disabled"
+          inputStyleClass="w-full">
+        </p-password>
+      </div>
+    </ng-container>
+
+    <!-- Actions -->
+    <div class="flex gap-2 justify-content-end mt-3">
+      <p-button label="Cancel" icon="pi pi-times" severity="secondary" [outlined]="true" (onClick)="onCancel()">
+      </p-button>
+      <p-button [label]="isCreation ? 'Create Destination' : 'Update Destination'"
+        [icon]="isCreation ? 'pi pi-plus' : 'pi pi-check'" [loading]="isLoading" *ngIf="!formGroup.disabled"
+        type="submit">
+      </p-button>
+    </div>
+  </div>
+</form>

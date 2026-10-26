@@ -1,0 +1,61 @@
+<div class="container">
+  <!-- Recent Alerts Section -->
+  <div class="alert-logs-section mb-4">
+    <h3 class="text-xl font-bold mb-3">Recent Alerts</h3>
+    <div class="card">
+      <div class="card-body p-0">
+        <table class="table table-striped table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Source</th>
+              <th>Status</th>
+              <th>Matched Rules</th>
+              <th>Destinations</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let log of alertLogs">
+              <td>{{ log.created_at | date : 'short' }}</td>
+              <td>{{ log.source_name || 'N/A' }}</td>
+              <td>
+                <span
+                  class="badge"
+                  [ngClass]="{
+                    'bg-success': log.status === 'success',
+                    'bg-warning': log.status === 'no_match',
+                    'bg-danger': log.status === 'failed'
+                  }"
+                >
+                  {{ log.status }}
+                </span>
+              </td>
+              <td>{{ log.matched_rules }}</td>
+              <td>
+                <span *ngIf="log.destinations_sent">
+                  {{ log.destinations_sent.length }}
+                </span>
+                <span *ngIf="!log.destinations_sent">0</span>
+              </td>
+            </tr>
+            <tr *ngIf="alertLogs.length === 0">
+              <td colspan="5" class="text-center text-muted">
+                No recent alerts
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kibana Dashboard -->
+  <iframe
+    title="dashboards"
+    class="responsive-iframe"
+    [src]="kibanaUrl"
+    src=""
+    height="600"
+    width="800"
+  ></iframe>
+</div>

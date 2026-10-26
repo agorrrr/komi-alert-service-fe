@@ -1,0 +1,47 @@
+<form *ngIf="formGroup" [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="pl-3 form-compact">
+  <div class="col-12 p-0 flex flex-column">
+    <!-- Dynamic Fields -->
+    <div *ngFor="let field of fields" class="col-10 flex flex-row align-items-center">
+      <label class="col-2">
+        {{ getFieldLabel(field) | translate }}:
+        <span *ngIf="field.required" style="color:red">*</span>
+      </label>
+      <div class="col-8">
+        <p-inputgroup>
+          <input pInputText
+                 [type]="getInputType(field)"
+                 [maxlength]="getMaxLength(field)"
+                 class="p-1 w-12"
+                 [formControlName]="field.name"/>
+          <p-inputgroup-addon *ngIf="field.type !== 'number'">
+            {{ getRemainingChars(field.name, getMaxLength(field)) }}
+          </p-inputgroup-addon>
+        </p-inputgroup>
+        <span class="p-error" *ngIf="formGroup | isFieldInvalid : field.name : 'required'">
+          {{ getFieldLabel(field) | translate }} {{ 'isReq'|translate }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="p-0 col-10 flex flex-row justify-content-end pt-3">
+    <button pButton pRipple
+            [label]="cancelLabel|translate"
+            (click)="onCancel()"
+            class="p-button-sm merapi-button-secondary mr-2"
+            type="button">
+    </button>
+
+    <button pButton pRipple
+            [loading]="isLoading"
+            [label]="submitLabel|translate"
+            icon="pi pi-plus"
+            class="p-button-sm merapi-button-page"
+            type="submit">
+    </button>
+  </div>
+</form>
+
+<div *ngIf="!formGroup" class="flex justify-content-center align-items-center p-4">
+  <app-loading-circular></app-loading-circular>
+</div>

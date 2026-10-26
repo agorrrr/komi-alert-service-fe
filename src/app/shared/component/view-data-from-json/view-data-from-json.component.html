@@ -1,0 +1,25 @@
+<ng-container *ngIf="isPlainText(data)">
+  <div [ngStyle]="{'color': containsUpdated(data) ? 'brown' : 'black'}">
+    {{ formatValue(data) }}
+  </div>
+</ng-container>
+
+<ng-container *ngIf="isObject(data)">
+  <p-panel [header]="data?.key || 'Data'" [toggleable]="true" class="panel-bg-filter">
+    <div *ngFor="let key of Object.keys(data)">
+      <div class="grid grid-nogutter">
+        <div class="col-2"><strong>{{ key | translate }}</strong></div>
+        <div class="col-1">:</div>
+        <div class="col-8 align-content-start">
+          <app-view-data-from-json [data]="data[key]"></app-view-data-from-json>
+        </div>
+      </div>
+    </div>
+  </p-panel>
+</ng-container>
+
+<ng-container *ngIf="isArray(data)">
+  <app-table-from-json [data]="data">
+
+  </app-table-from-json>
+</ng-container>

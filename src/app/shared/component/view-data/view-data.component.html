@@ -1,0 +1,74 @@
+<p-card header="" class="shadow-md rounded-xl w-full">
+  <div class="grid grid-cols-2 gap-6 p-2 w-full">
+    <!-- Informasi Menu -->
+    <div class="space-y-4">
+      <div *ngFor="let item of data" class="flex items-center gap-3">
+        <i class="pi {{getIcon(item.key)}} text-gray-500"></i>
+        <span class="font-semibold text-gray-700 w-32">{{item.key | translate}}</span>
+        <span class="text-black">{{item.value}}</span>
+      </div>
+    </div>
+    <!-- Permissions -->
+    <ng-container *ngIf="isHavePermission && permissions.length">
+      <div class="space-y-2">
+        <div class="font-semibold text-gray-700 mb-2">
+          <i class="pi pi-lock mr-2"></i>Permissions
+        </div>
+
+        <ul class="space-y-1">
+          <li *ngFor="let key of permissionKeys" class="flex justify-between">
+            <span>{{ permissionLabels[key] }}</span>
+            <i class="pi {{ getPermissionIcon(key) }} text-blue-500"></i>
+          </li>
+        </ul>
+      </div>
+    </ng-container>
+
+
+    <!-- Metadata -->
+    <div *ngIf="isHaveWhoWhen && whoWhen.length"
+      class="col-span-2 border-t pt-4 mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="space-y-2">
+        <div *ngFor="let item of whoWhen" class="flex items-center gap-3">
+          <i class="pi {{getWhoWhenIcon(item.key)}} text-gray-500"></i>
+          <span class="font-semibold text-gray-700 w-32">{{ item.key | translate }}</span>
+          <span>
+            {{ item.value ? (item.key.includes('_at') ? (item.value | date: 'dd MMMM yyyy, HH:mm') : item.value) : '-'
+            }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col-span-2 border-t pt-4 mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <i class="pi pi-clock text-gray-500"></i>
+          <span class="font-semibold text-gray-700 w-32">Created At:</span>
+          <span>23 April 2025, 18:15</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <i class="pi pi-refresh text-gray-500"></i>
+          <span class="font-semibold text-gray-700 w-32">Updated At:</span>
+          <span>23 April 2025, 19:04</span>
+        </div>
+      </div>
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <i class="pi pi-user text-gray-500"></i>
+          <span class="font-semibold text-gray-700 w-32">Created By:</span>
+          <span>10299999</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <i class="pi pi-briefcase text-gray-500"></i>
+          <span class="font-semibold text-gray-700 w-32">Module:</span>
+          <span>Analytics</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <i class="pi pi-th-large text-gray-500"></i>
+          <span class="font-semibold text-gray-700 w-32">App Menu ID:</span>
+          <span>100106</span>
+        </div>
+      </div>
+    </div> -->
+  </div>
+</p-card>

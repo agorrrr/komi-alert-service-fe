@@ -1,0 +1,73 @@
+<form *ngIf="formGroup && isFormReady" [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="pl-3 form-compact">
+  <div class="grid">
+    <!-- Name Field -->
+    <div class="col-6 flex flex-row align-items-center">
+      <label for="name" class="col-2">{{ 'name' | translate }}: <span style="color:red">*</span></label>
+      <div class="col-8">
+        <p-inputgroup>
+          <input pInputText id="name" maxlength="255" class="p-1 w-12"
+                 formControlName="name"/>
+          <p-inputgroup-addon>{{ 255 - (formGroup?.value?.name?.length || 0) }}</p-inputgroup-addon>
+        </p-inputgroup>
+        <span class="p-error" *ngIf="formGroup | isFieldInvalid : 'name' : 'required'">
+          {{ 'name' | translate }} {{ 'isReq'|translate }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Email Field -->
+    <div class="col-6 flex flex-row align-items-center">
+      <label for="email" class="col-2">{{ 'email' | translate }}: <span style="color:red">*</span></label>
+      <div class="col-8">
+        <p-inputgroup>
+          <input pInputText id="email" maxlength="255" class="p-1 w-12"
+                 formControlName="email"/>
+          <p-inputgroup-addon>&#64;</p-inputgroup-addon>
+        </p-inputgroup>
+        <span class="p-error" *ngIf="formGroup | isFieldInvalid : 'email' : 'required'">
+          {{ 'email' | translate }} {{ 'isReq'|translate }}
+        </span>
+        <span class="p-error" *ngIf="formGroup | isFieldInvalid : 'email' : 'email'">
+          {{ 'email' | translate }} format is invalid
+        </span>
+      </div>
+    </div>
+
+    <!-- Birth Date Field -->
+    <div class="col-6 flex flex-row align-items-center">
+      <label class="col-2">{{ 'birthDate' | translate }}: <span style="color:red">*</span></label>
+      <div class="col-8">
+        <p-date-picker
+          formControlName="birthDate"
+          styleClass="w-full"
+          [showIcon]="true"
+          [appendTo]="'body'"
+          dateFormat="dd-mm-yy"
+          placeholder="dd-mm-yyyy"
+          [hideOnDateTimeSelect]="true"
+        />
+        <span class="p-error" *ngIf="formGroup | isFieldInvalid : 'birthDate' : 'required'">
+          {{ 'birthDate' | translate }} {{ 'isReq'|translate }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-11 flex justify-content-end pt-3">
+    <div class="field col-2">
+      <button pButton pRipple
+              [loading]="state.isLoading$ | async"
+              [label]="'btnSubmit'|translate"
+              icon="pi pi-plus"
+              class="p-button-sm merapi-button-page"
+              type="submit"
+              [disabled]="formGroup?.invalid || (state.isLoading$ | async)">
+      </button>
+    </div>
+  </div>
+</form>
+
+<!-- Loading state while form is being prepared -->
+<div *ngIf="!formGroup || !isFormReady" class="flex justify-content-center align-items-center p-4">
+  <app-loading-circular></app-loading-circular>
+</div>

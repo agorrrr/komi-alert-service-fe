@@ -1,0 +1,129 @@
+/* Compact Table Styles */
+:host ::ng-deep {
+  td {
+    font-size: 0.6rem !important;
+    padding: 0.25rem 0.25rem !important;
+
+    label {
+      font-size: 0.65rem !important;
+    }
+  }
+
+  th {
+    font-size: 0.8rem !important;
+    line-height: 1.2 !important;
+    white-space: normal !important;
+    max-width: 120px;
+    padding: 0.375rem 0.5rem !important;
+  }
+
+  .p-button-sm {
+    padding-top:  2px !important;
+    padding-bottom:  2px !important;
+    padding-left:  5px !important;
+    padding-right:  5px !important;
+    margin: 0!important;
+    height: 20px;
+    font-size: 0.6rem !important;
+    min-width: auto !important;
+  }
+
+  .p-tag {
+    font-size: 0.65rem !important;
+    padding: 0.15rem 0.3rem !important;
+    min-width: 50px !important;
+  }
+
+  .p-row-toggler {
+    width: 1.2rem !important;
+    height: 1.2rem !important;
+    font-size: 0.7rem !important;
+  }
+
+  tr {
+    height: auto !important;
+    min-height: 2rem !important;
+  }
+}
+
+:host ::ng-deep .action-buttons {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  justify-content: center;
+}
+
+:host ::ng-deep  .p-datatable .p-datatable-caption {
+  background-color: white !important;
+  color: black; /* Optional: adjust text color for contrast */
+}
+
+.score-container {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.score-bar {
+  flex: 1;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.score-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.score-value {
+  font-size: .7rem;
+  font-weight: 700;
+  color: #666;
+  min-width: 30px;
+  text-align: right;
+}
+
+.small-button{
+  padding: 0!important;
+  margin: 0!important;
+}
+
+.small-input{
+  height: 25px;
+}
+
+.p-multiselect {
+  font-size: .55rem!important;
+}
+
+.selection-panel{
+  height: 20px;
+  padding-left: 10px!important;
+  padding-right: 10px!important;
+  background-color: #f4f7fd;
+}
+.selection-panel:hover{
+  border: 1px solid #1c9afb;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  :host ::ng-deep {
+    td {
+      font-size: 0.7rem !important;
+      padding: 0.2rem 0.25rem !important;
+    }
+
+    th {
+      font-size: 0.75rem !important;
+      padding: 0.3rem 0.25rem !important;
+    }
+
+    .p-button-sm {
+      padding: 0.2rem 0.3rem !important;
+      font-size: 0.65rem !important;
+    }
+  }
+}

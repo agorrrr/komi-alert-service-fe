@@ -1,0 +1,52 @@
+
+::ng-deep .rpt-table .p-datatable .p-datatable-thead > tr > th,
+::ng-deep .rpt-table .p-datatable .p-datatable-tbody > tr > td {
+    min-width: 125px;
+
+}
+
+::ng-deep .rpt-table .p-datatable .p-datatable-thead > tr > th {
+    font-weight: 800;
+}
+
+::ng-deep .rpt-table .p-datatable .p-datatable-tbody > tr > td {
+    font-size: 13px;
+    font-weight: 400!important;
+    color: #434141!important;
+    padding: 0.5rem 0.5rem!important;
+    
+}
+
+::ng-deep .rpt-table .p-paginator.p-component.ng-star-inserted,
+::ng-deep .rpt-table .p-paginator button.p-ripple{
+    font-size: 13px;
+ 
+}
+::ng-deep .rpt-table .p-paginator.p-component.ng-star-inserted{
+    padding: 0.25rem;
+}
+::ng-deep .rpt-table .p-paginator button.p-ripple{
+    min-width: 3rem;
+    transition: box-shadow 0.2s;
+}
+
+
+::ng-deep .rpt-table .p-paginator .p-select .p-select-label{
+    padding: 0.3rem 0.75rem;
+    padding-right: 0rem;
+}
+
+/* For webkit-based browsers (Chrome, Safari) */
+::ng-deep .rpt-table ::-webkit-scrollbar-thumb {
+    background: #1a97ac !important; /* Change the background color of the thumb */
+    border-radius: 4px; /* Optional: Add rounded corners to the thumb */
+    width:50px;
+}
+
+/* For Firefox */
+::ng-deep .rpt-table scrollbar-thumb {
+    background: #1a97ac !important; /* Change the background color of the thumb */
+    border-radius: 4px; /* Optional: Add rounded corners to the thumb */
+    width:50px;
+}
+

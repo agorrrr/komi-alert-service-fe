@@ -1,0 +1,201 @@
+{
+  "id_user": "10215383",
+  "id_tenant_user": "101231",
+  "id_ext_tenant_user": null,
+  "keyid_user": "romikms",
+  "name_user": "Romi Sapputra",
+  "login_type_user": 0,
+  "level_user": 1,
+  "status_user": 1,
+  "email_user": "romi@kmsgoup.com",
+  "mobile": "(+62)0856-9446-3308",
+  "keyactivated": null,
+  "name_tenant": "PT Tefal Indonesia",
+  "desc_tenant": "World No. 1 in Cookware, Globally trusted French Brand since 1956",
+  "address_tenant": "Sudirman Plaza Plaza Marein, 8th Floor Jl. Jend. Sudirman kav 76-78 Jakarta 12910 - Indonesia",
+  "phone_tenant": "02157937007",
+  "email_tenant": "romi@kmsgoup.com",
+  "id_app": "100170",
+  "name_app": "RESAP MONITOR",
+  "desc_app": "Aplikasi Monitoring RESAP MOBILE",
+  "id_tenant_app": "101231",
+  "status": 1,
+  "liscense_app": null,
+  "expired_app": "2024-12-23T17:56:00.000Z",
+  "use_approve_app": 0,
+  "link_app": "http://localhost:3000",
+  "path_icon": "http://localhost:3022/assets/images/apps/1688394203198-497731243-logoonly.png",
+  "key_app": "8a852e9a6d78f9150b627331a1347629",
+  "login_type": 0,
+  "id_set_group": "80195590",
+  "id_user_set_group": "10215383",
+  "id_group_set_group": "20092661",
+  "updated_by": null,
+  "id_app_group": "100170",
+  "id_roles_group": "A001",
+  "name_role": "Contributor",
+  "moduleMenus": [
+    {
+      "id_seq_gd": "201025690",
+      "id_module_gd": "10295115",
+      "name_module": "Management",
+      "desc_module": "Perangkat management Virtual Account",
+      "menus": [
+        {
+          "id_menu": "10316968",
+          "name_menu": "Companies",
+          "desc_menu": "Management Companies",
+          "icon_menu": "pi-building",
+          "link_menu": "/management/companies",
+          "created_by": "10299999",
+          "created_at": "2023-07-03T10:47:02.317Z",
+          "updated_at": null,
+          "id_module_menu": "10295115",
+          "seq_menu": "9",
+          "id_app_menu": "100170"
+        }
+      ]
+    },
+    {
+      "id_seq_gd": "201036349",
+      "id_module_gd": "10257959",
+      "name_module": "Settings",
+      "desc_module": "All attribute Setting",
+      "menus": [
+        {
+          "id_menu": "10384871",
+          "name_menu": "Bussiness Schema",
+          "desc_menu": "Untuk memonitor resource berada",
+          "icon_menu": "pi-box",
+          "link_menu": "/settings/schema",
+          "created_by": "10299999",
+          "created_at": "2023-07-03T10:51:48.112Z",
+          "updated_at": null,
+          "id_module_menu": "10257959",
+          "seq_menu": "9",
+          "id_app_menu": "100170"
+        },
+        {
+          "id_menu": "10384872",
+          "name_menu": "Charges",
+          "desc_menu": "Untuk Setting VAM Charges",
+          "icon_menu": "pi-bolt",
+          "link_menu": "/settings/charges",
+          "created_by": "10299999",
+          "created_at": "2023-07-03T10:51:48.112Z",
+          "updated_at": null,
+          "id_module_menu": "10257959",
+          "seq_menu": "9",
+          "id_app_menu": "100170"
+        },
+        {
+          "id_menu": "10384873",
+          "name_menu": "Revenue",
+          "desc_menu": "Pool Revenue",
+          "icon_menu": "pi-money-bill",
+          "link_menu": "/settings/revenue",
+          "created_by": "10299999",
+          "created_at": "2023-07-03T10:51:48.112Z",
+          "updated_at": null,
+          "id_module_menu": "10257959",
+          "seq_menu": "9",
+          "id_app_menu": "100170"
+        },
+        {
+          "id_menu": "10384874",
+          "name_menu": "Approval",
+          "desc_menu": "Setting Application Approval",
+          "icon_menu": "pi-lock",
+          "link_menu": "/settings/approval",
+          "created_by": "10299999",
+          "created_at": "2023-07-03T10:51:48.112Z",
+          "updated_at": null,
+          "id_module_menu": "10257959",
+          "seq_menu": "9",
+          "id_app_menu": "100170"
+        }
+      ]
+    },
+    {
+      "id_seq_gd": "201036350",
+      "id_module_gd": "10257960",
+      "name_module": "Task",
+      "desc_module": "All Task to Approval",
+      "menus": [
+        {
+          "id_menu": "10384881",
+          "name_menu": "Companies",
+          "desc_menu": "Untuk memonitor resource berada",
+          "icon_menu": "pi-check-square",
+          "link_menu": "/task/companies",
+          "created_by": "10299999",
+          "created_at": "2023-07-03T10:51:48.112Z",
+          "updated_at": null,
+          "id_module_menu": "10257959",
+          "seq_menu": "9",
+          "id_app_menu": "100170"
+        },
+        {
+          "id_menu": "10384882",
+          "name_menu": "Charges",
+          "desc_menu": "Untuk Setting VAM Charges",
+          "icon_menu": "pi-check-circle",
+          "link_menu": "/task/charges",
+          "created_by": "10299999",
+          "created_at": "2023-07-03T10:51:48.112Z",
+          "updated_at": null,
+          "id_module_menu": "10257959",
+          "seq_menu": "9",
+          "id_app_menu": "100170"
+        }
+      ]
+    },
+    {
+      "id_seq_gd": "201036361",
+      "id_module_gd": "10257959",
+      "name_module": "Monitoring",
+      "desc_module": "All Task to Approval",
+      "menus": [
+        {
+          "id_menu": "10384890",
+          "name_menu": "VA Maintenance",
+          "desc_menu": "Untuk VA Blocking Unblocking",
+          "icon_menu": "pi-desktop",
+          "link_menu": "/monitor/vamaintenance",
+          "created_by": "10299999",
+          "created_at": "2023-07-03T10:51:48.112Z",
+          "updated_at": null,
+          "id_module_menu": "10257959",
+          "seq_menu": "9",
+          "id_app_menu": "100170"
+        },
+        {
+          "id_menu": "10384892",
+          "name_menu": "User Maintenance",
+          "desc_menu": "Monitoring User",
+          "icon_menu": "pi-user",
+          "link_menu": "/monitor/user-maintenance",
+          "created_by": "10299999",
+          "created_at": "2023-07-03T10:51:48.112Z",
+          "updated_at": null,
+          "id_module_menu": "10257959",
+          "seq_menu": "9",
+          "id_app_menu": "100170"
+        },
+        {
+          "id_menu": "10384891",
+          "name_menu": "Transaction Query",
+          "desc_menu": "View VA Transaction Daily activity",
+          "icon_menu": "pi-chart-bar",
+          "link_menu": "/monitor/transactionquery",
+          "created_by": "10299999",
+          "created_at": "2023-07-03T10:51:48.112Z",
+          "updated_at": null,
+          "id_module_menu": "10257959",
+          "seq_menu": "9",
+          "id_app_menu": "100170"
+        }
+      ]
+    }
+  ]
+}

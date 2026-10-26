@@ -1,0 +1,251 @@
+// =============================================
+// HOST & LAYOUT — must be outside ::ng-deep
+// =============================================
+
+:host {
+  display: block;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  flex-shrink: 0;
+  width: 240px;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: width 0.3s ease;
+  background-color: #fff;
+  border-right: 1px solid #e5e7eb;
+
+  &.collapsed {
+    width: 64px;
+  }
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 40;
+
+  &.active {
+    display: block;
+  }
+}
+
+.sidebarcontent {
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+
+@media (max-width: 960px) {
+  .sidebar {
+    position: fixed;
+    left: -240px;
+    top: 0;
+    z-index: 50;
+    height: 100vh;
+    transition: left 0.3s ease;
+
+    &.mobile-open {
+      left: 0;
+    }
+  }
+
+  .content {
+    width: 100%;
+  }
+}
+
+// =============================================
+// PRIMENG INTERNALS — your original unchanged
+// =============================================
+
+::ng-deep {
+  .p-button.header-text .p-button-label {
+    color: #000;
+  }
+
+  .p-breadcrumb .p-breadcrumb-item {
+    font-size: 0.65rem;
+  }
+
+  .p-button.header-text {
+    background-color: transparent !important;
+    outline: transparent !important;
+  }
+
+  .p-panelmenu-item {
+    margin-left: 25px;
+  }
+
+  .p-panelmenu .p-panelmenu-item-link-active {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    font-weight: bold;
+  }
+
+  .p-panelmenu .active-menu {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    font-weight: bold;
+  }
+
+  .p-panelmenu .active-menu span {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    font-weight: bold;
+  }
+
+  .p-panelmenu-header-link {
+    padding: 0.625rem 0.5rem !important;
+  }
+
+  .p-panelmenu-header-label,
+  .p-panelmenu-item-label {
+    font-weight: bold;
+    font-size: small;
+  }
+
+  .p-panelmenu-header .submenu-toggler {
+    transition-behavior: normal;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    transition-delay: 0s;
+    transition-property: transform;
+  }
+
+  .p-panelmenu-header-active .submenu-toggler {
+    transform: rotate(-180deg);
+  }
+
+  .p-panelmenu-header {
+    transition: color 0.3s ease, background-color 0.3s ease;
+  }
+
+  .p-panelmenu-panel:hover .p-panelmenu-header {
+    background-color: #F1F5F9;
+  }
+
+  .ic-navbar {
+    display: none !important;
+  }
+
+  .ic-navbar-header.pi {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    color: #667085;
+    mask-size: contain;
+  }
+
+  .ic-navbar-header.pi.pi-user {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    color: #667085;
+    mask-size: contain;
+  }
+
+  .ic-navbar-header.pi.pi-calendar {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    color: #667085;
+    mask-size: contain;
+  }
+
+  .ic-navbar-header.pi.pi-book {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    color: #667085;
+    mask-size: contain;
+  }
+
+  .ic-navbar-header.pi.pi-smartva-monitoring {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    color: #667085;
+    mask-size: contain;
+  }
+
+  .ic-navbar-header.pi.pi-money-bill {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    color: #667085;
+    mask-size: contain;
+  }
+
+  .pi-smartva-analytics {
+    content: url("/assets/images/custom-icon/Custom-Icon/smartva-analyticsicon.svg");
+  }
+
+  .pi-smartva-billing:before {
+    content: url("/assets/images/custom-icon/Custom-Icon/smartva-billingicon.svg");
+  }
+
+  .pi-smartva-business:before {
+    content: url("/assets/images/custom-icon/Custom-Icon/smartva-businessicon.svg");
+  }
+
+  .pi-smartva-company:before {
+    content: url("/assets/images/custom-icon/Custom-Icon/smartva-companyicon.svg");
+  }
+
+  .pi-smartva-home:before {
+    content: url("/assets/images/custom-icon/Custom-Icon/smartva-homeicon.svg");
+  }
+
+  .pi-smartva-monitoring:before {
+    content: url("/assets/images/custom-icon/Custom-Icon/smartva-monitoringicon.svg");
+  }
+
+  .pi-smartva-reports:before {
+    content: url("/assets/images/custom-icon/Custom-Icon/smartva-reporticon.svg");
+  }
+
+  .pi-smartva-settings:before {
+    content: url("/assets/images/custom-icon/Custom-Icon/smartva-settingsicon.svg");
+  }
+
+  .pi-smartva-va:before {
+    content: url("/assets/images/custom-icon/Custom-Icon/smartva-VAicon.svg");
+  }
+
+  .pi-smarthomebreadcrumb:before {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    content: url("/assets/images/custom-icon/homebreadcrumb.svg");
+    -webkit-mask: url(/assets/images/custom-icon/homebreadcrumb.svg) no-repeat 50% 50%;
+    mask: url(/assets/images/custom-icon/homebreadcrumb.svg) no-repeat 50% 50%;
+    -webkit-mask-size: cover;
+    mask-size: cover;
+  }
+}

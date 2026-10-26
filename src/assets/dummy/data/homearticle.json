@@ -1,0 +1,21 @@
+{
+    "title":"Welcome to Virtual Account Management",
+    "created_by":"Administrator",
+    "frontpage":true,
+	"page":"home",
+    "description":"<p>This website aims to help interface developers as a reference. The contents of this portal are purposed to help Banking Users to manage Company/Coorporate attributes such as credential, bussines flow and roles, etc.</p><div class='py-1'></div><p>Before using this website, it's a good idea to register your personal profile first so that later if there are new update you will be notified via email.</p><div class='py-2'></div>",
+    "imagesfeature":[
+        {
+            "imgurl":"https://rxjs.dev/generated/images/marketing/home/Rx_Logo-512-512.png",
+            "caption":"RxJs Library"
+        },
+        {
+            "imgurl":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHPBgf0EZ8dyJB5Ds7lpu5xchwV6Cb-HHXgFEbCY6A_s3K3vklLirOLMRFqgs_irc1l4g&usqp=CAU",
+            "caption":"NgRx Library"
+        },
+        {
+            "imgurl":"https://i0.wp.com/primefaces.org/wp-content/uploads/2016/10/primeng.png?resize=250%2C250",
+            "caption":"PrimeNg Library"
+        }
+    ]
+}
