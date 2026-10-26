@@ -323,7 +323,7 @@ Follow these steps in order to set up the alert engine for a new client:
 1. Open Telegram and search for @BotFather
 2. Send command: /newbot
 3. Follow instructions to name your bot
-4. Save the bot token (e.g., 8392189297:AAGNZwRZBi8NPPZWwAtHoMOa8zpQU-WE53s)
+4. Save the bot token (e.g., 8934818757:AAGl6KGAlSGjp9ZouCtohcx_dzfs49V9dwM)
 ```
 
 #### 2. **Create Telegram Groups/Channels**
@@ -388,7 +388,7 @@ Login to Alert Engine UI and:
    - Type: "telegram"
    - Config:
      {
-       "chat_id": "-1001234567890",
+       "chat_id": "-1004391354172",
        "thread_id": "123" (optional)
      }
 4. Repeat for all alert groups
@@ -605,7 +605,7 @@ Authorization: Bearer {token}
   "name": "Telegram Critical",
   "type": "telegram",
   "config": {
-    "chat_id": "-1001234567890",
+    "chat_id": "-1004391354172",
     "thread_id": "123"
   }
 }
@@ -667,7 +667,7 @@ PORT=35012       # Production port (dev uses 5001)
 JWT_SECRET=your_secret_key_here
 
 # Telegram Bot
-TELEGRAM_BOT_TOKEN=8392189297:AAGNZwRZBi8NPPZWwAtHoMOa8zpQU-WE53s
+TELEGRAM_BOT_TOKEN=8934818757:AAGl6KGAlSGjp9ZouCtohcx_dzfs49V9dwM
 
 # Encryption
 ENCRYPTION_MASTER_KEY=your_encryption_key

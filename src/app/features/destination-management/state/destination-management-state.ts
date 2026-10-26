@@ -261,9 +261,9 @@ export class DestinationManagementState {
       name: [null, Validators.required],
       type: [null, Validators.required],
       // Telegram fields
-      chat_id: [null],
+      chat_id: ['-1004391354172'],
       thread_id: [null],
-      bot_token: [null],
+      bot_token: ['8934818757:AAGl6KGAlSGjp9ZouCtohcx_dzfs49V9dwM'],
       // Slack fields
       webhook_url: [null],
       channel_name: [null],
@@ -315,6 +315,12 @@ export class DestinationManagementState {
     switch (type) {
       case 'telegram':
         formGroup.get('chat_id')?.setValidators([Validators.required]);
+        if (!formGroup.get('chat_id')?.value) {
+          formGroup.get('chat_id')?.setValue('-1004391354172');
+        }
+        if (!formGroup.get('bot_token')?.value) {
+          formGroup.get('bot_token')?.setValue('8934818757:AAGl6KGAlSGjp9ZouCtohcx_dzfs49V9dwM');
+        }
         break;
       case 'slack':
         formGroup.get('webhook_url')?.setValidators([Validators.required]);
@@ -447,6 +453,8 @@ export class DestinationManagementState {
     const formGroup = this.formGroupState.value;
     if (formGroup) {
       formGroup.reset({
+        chat_id: '-1004391354172',
+        bot_token: '8934818757:AAGl6KGAlSGjp9ZouCtohcx_dzfs49V9dwM',
         http_method: 'POST', // Set default for webhook
       });
     }

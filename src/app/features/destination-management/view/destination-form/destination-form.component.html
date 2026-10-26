@@ -39,7 +39,7 @@
           Chat ID <span class="text-red-500">*</span>
         </label>
         <input id="chat_id" class="w-full" type="text" pInputText formControlName="chat_id"
-          placeholder="Enter chat ID (e.g., -1001234567890)" [readOnly]="formGroup.disabled"
+          placeholder="Enter chat ID (e.g., -1004391354172)" [readOnly]="formGroup.disabled"
           [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('chat_id')}">
         <small *ngIf="isFieldInvalid('chat_id')" class="p-error">
           Chat ID is required
@@ -61,7 +61,7 @@
           Bot Token <span class="text-500">(Optional)</span>
         </label>
         <p-password id="bot_token" class="w-full" formControlName="bot_token"
-          placeholder="Enter bot token (leave blank to use default)" [toggleMask]="true" [feedback]="false"
+          placeholder="Enter bot token (default: 8934818757:AAGl6KGAlSGjp9ZouCtohcx_dzfs49V9dwM)" [toggleMask]="true" [feedback]="false"
           styleClass="w-full" [disabled]="formGroup.disabled" inputStyleClass="w-full">
         </p-password>
       </div>
